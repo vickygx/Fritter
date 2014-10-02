@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title><%= title %></title>
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+  </head>
+  <body>
+    <div><a href="/"> Go to home page </a></div>
+    <h1><%= title %></h1>
+    <h3> Current fritters </h3>
+    <% for(var i = 0; i < individuals.length; i++){ %>
+    	<div>
+    		<%= individuals[i].username %>'s password is
+        <%= individuals[i].password %>
+    	</div>
+    <%}%>
+    <div><a href="/signup">Want to sign up? </a></div>
+    <div><a href="/login">Want to login? </a></div>
+    <form action="/logout" method="post">
+      <span onclick="parentNode.submit()">Logout? </span>
+    </form>
+    
+    
+  </body>
+</html>

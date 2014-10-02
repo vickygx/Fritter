@@ -2,10 +2,24 @@
 <html>
   <head>
     <title><%= title %></title>
-    <link rel='stylesheet' href='/stylesheets/style.css' />
+    <link rel='stylesheet' href='/stylesheets/index.css' />
+    <link rel='stylesheet' href='/stylesheets/signup-login.css' />
+    <script type="text/javascript" src="javascripts/jquery-2.1.1.min.js"></script>
+    <script type="text/javascript" src="javascripts/signup-login.js"> 
+    </script>
+    <script type="text/javascript">
+    	$(document).ready(function(){
+    		<%if (locals.error) {%>
+    			var someerror = "<%= error %>";
+	            $('#body').append(SignupLoginWidget('signup', someerror, true));	
+	        <% } else { %>
+	        	$('#body').append(SignupLoginWidget('signup', null, true));	
+	        <% } %>	
+		});
+    </script>
   </head>
-  <body>
-    <h1><%= title %></h1>
-    <p>Welcome to <%= title %></p>
+  <body id="body">
+    <h1 id="title"><%= title %></h1>
+
   </body>
 </html>

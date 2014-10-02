@@ -1,0 +1,43 @@
+.signup{
+	background: rgba(255, 255, 255, 0.97);
+	width: 350px;
+	margin: 0 auto;
+	padding: 20px 10px 10px 10px;
+	border-radius:6px;
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.22);
+}
+
+.signupInput {
+	width: 100%;
+	padding: 10px 5px;
+	margin: 10px 0;
+
+	-webkit-box-sizing: border-box; /* Safari/Chrome, other WebKit */
+  	-moz-box-sizing: border-box;    /* Firefox, other Gecko */
+  	box-sizing: border-box;         /* Opera/IE 8+ */
+}
+
+.signupSubmit {
+	border-radius: 3px;
+	border:0;
+	width: 100%;
+	padding: 15px 5px;
+	margin: 20px 0 5px 0;
+	background-color: rgb(134, 17, 45);
+	color: white;
+	font-size: 12pt;
+	font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif; 
+
+	-webkit-box-sizing: border-box; /* Safari/Chrome, other WebKit */
+  	-moz-box-sizing: border-box;    /* Firefox, other Gecko */
+  	box-sizing: border-box;         /* Opera/IE 8+ */
+}
+
+#accountText {
+	font-size: 11pt;
+	text-align: center;
+	margin: 10px 0;
+}
+
+
+

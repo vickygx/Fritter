@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title><%= title %></title>
+    <link rel='stylesheet' href='/stylesheets/login.css' />
+    <link rel='stylesheet' href='/stylesheets/signup-login.css' />
+    <script type="text/javascript" src="javascripts/jquery-2.1.1.min.js"></script>
+    <script type="text/javascript" src="javascripts/signup-login.js"> 
+    </script>
+    <script type="text/javascript">
+      $(document).ready(function(){
+        <%if (locals.error) {%>
+          var someerror = "<%= error %>";
+              $('#body').append(SignupLoginWidget('authenticate', someerror, false)); 
+          <% } else { %>
+            $('#body').append(SignupLoginWidget('authenticate', null, false));  
+          <% } %> 
+    });
+    </script>
+  </head>
+  <body id="body">
+    <h1 id="title"><%= title %></h1>
+  </body>
+</html>

@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title><%= title %></title>
+    <link rel='stylesheet' href='/stylesheets/message.css' />
+    <link rel='stylesheet' href='/stylesheets/homepage.css' />
+  </head>
+  <body>
+    <div><a href="/users"> Dashboard </a></div>
+    <h1><%= title %></h1>
+    <h3> Welcome <%= username %> </h3>
+      <h4>Your tweets</h4>
+      <div class="messageBox">
+        <% for(var i = 0; i < messages.length; i++){ %>
+          <div id='<%= messages[i].id %>' class="message">
+            <div class="message_user message_type">
+              @<%= messages[i].user %>
+            </div>
+            <div class="message_message message_type">
+              <%= messages[i].message %>
+            </div>
+            <div class="message_time message_type">
+              <%= messages[i].getTimeFrom() %>
+            </div>
+            <div class="edit"> 
+            </div>
+          </div>
+        <%}%>
+      </div>
+
+    <div> 
+        <form name="input" action="message" method="post">
+        Message: <input type="text" name="message">
+        <input type="submit" value="Submit">
+        </form>
+    </div>
+
+    <form action="/logout" method="post">
+      <span onclick="parentNode.submit()"><b>Logout? </b></span>
+    </form>
+    
+    
+  </body>
+</html>
