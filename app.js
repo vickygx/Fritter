@@ -111,5 +111,7 @@ app.use(function(err, req, res, next) {
     });
 });
 
+app.listen(process.env.OPENSHIFT_NODEJS_PORT || 8080,
+    process.env.OPENSHIFT_NODEJS_IP);
 
 module.exports = app;
