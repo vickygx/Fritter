@@ -2,28 +2,55 @@
 <html>
   <head>
     <title><%= title %></title>
+    <!-- Jquery -->
+    <script type="text/javascript" src="/javascripts/jquery-2.1.1.min.js"></script>
+
+    <!-- Style Sheets -->
+    <link rel='stylesheet' href='/stylesheets/general.css' />
     <link rel='stylesheet' href='/stylesheets/message.css' />
     <link rel='stylesheet' href='/stylesheets/homepage.css' />
+
+    <!-- Javascript -->
+    <script type="text/javascript" src="/javascripts/message.js"></script>
+    <script type="text/javascript">
+      $(document).ready(function(){
+        setEdit('editButton');
+        setSave('saveButton');
+        setDelete('deleteButton');
+      });
+    </script>
   </head>
   <body>
     <div><a href="/users"> Dashboard </a></div>
     <h1><%= title %></h1>
     <h3> Welcome <%= username %> </h3>
-      <h4>Your tweets</h4>
+
+      <!-- Box to contain user's messages -->
       <div class="messageBox">
+        <div class="messageBoxTitle">My Fweets</div>
         <% for(var i = 0; i < messages.length; i++){ %>
+          <!-- Each message  -->
           <div id='<%= messages[i].id %>' class="message">
+
+            <!-- User handler display -->
             <div class="message_user message_type">
               @<%= messages[i].user %>
             </div>
+            <!-- Message display -->
             <div class="message_message message_type">
-              <%= messages[i].message %>
+              <span class="textdisplay"><%= messages[i].message %></span>
+              <input class="textedit" type="text" name="newmessage">
             </div>
+            <!-- Time display -->
             <div class="message_time message_type">
               <%= messages[i].getTimeFrom() %>
             </div>
-            <div class="edit"> 
-            </div>
+
+            <!-- Save and Edit buttons -->
+            <button type="submit" class="saveButton" />Save</button>
+            <button type="submit" value="edit" class="editButton" />Edit</button>
+            <button type="submit" class="deleteButton">
+              x </button>
           </div>
         <%}%>
       </div>

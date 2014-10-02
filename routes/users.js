@@ -1,10 +1,10 @@
 var mongoose = require('mongoose');
 var express = require('express');
+var app = express();
 var router = express.Router();
 var User = require('../models/user');
 var Messages = require('../models/message');
 var MessagesController = require('../controllers/messages');
-
 
 /* Gets a list of all users */
 router.get('/', function(req, res) {
@@ -15,12 +15,12 @@ router.get('/', function(req, res) {
   });
 });
 
-
 /* Route to message page  (show and create) */
 router.get('/home', function(req, res) {
 	console.log(req.session);
 	if (req.session.user){
 		// if not logged in, shows all users
+		// TODO: return messages by creation, not by modification
 		var currentUser = req.session.user;
 		var messages = Messages.find({user: currentUser}, function(e, messages){
 			res.render('users/home', 
@@ -42,23 +42,34 @@ router.post('/message', function(req, res){
 	var userid = req.session.user;
 
 	MessagesController.createMessage(userid, msg, function(success){
-		if (success) res.redirect("home");
+		if (success) res.redirect("/users/home");
 		else res.redirect(404);
 	})
 });
 
-router.post('/deletemessage', function(req, res){
-	var msgId = 123;
-	Messages.remove({message_id: msgId}, function(err){});
+router.post('/deletemessage/:id', function(req, res){
+	var msgId = req.params.id;
+	MessagesController.removeMessage(msgId, function(err, success){
+		if (err) {
+			console.log('messages delete error');
+			// do something with error
+		}
+		else if (success) res.redirect('/users/home');
+		else res.redirect(404);
+	});
+	
 });
 
-router.post('/editmessage', function(req, res){
-	// get messageid somehow
-	var msgId = 1213;
-	var msg = req.body.message;
+router.post('/editmessage/:id', function(req, res){
+	var msgId = req.params.id;
+	var msg = req.body.newmessage;
 
-	MessagesController.editMessage(msgId, msg, function(success){
-		if (success) res.redirect('home');
+	MessagesController.editMessage(msgId, msg, function(err, success){
+		if (err) {
+			console.log('messages error');
+			// do something with error
+		}
+		else if (success) res.redirect('/users/home');
 		else res.redirect(404);
 	});
 });

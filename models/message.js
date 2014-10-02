@@ -13,7 +13,7 @@ var MessagesSchema = new Schema({
 	modified: {type: Date, required: true}
 });
 
-/* 	
+/* 	Gets the time formatted by time from current time. 
 	*/
 MessagesSchema.methods.getTimeFrom = function() {
     var currentTime = Date.now();
@@ -32,13 +32,6 @@ MessagesSchema.methods.getTimeFrom = function() {
     var days = hour / 24;
     return Math.floor(days) + ' days ago';
 
-};
-
-/* 	
-	*/
-MessagesSchema.methods.editMessage = function(msg) {
-    this.modified = Date.now();
-    this.message = msg;
 };
  
 module.exports = mongoose.model('message', MessagesSchema);

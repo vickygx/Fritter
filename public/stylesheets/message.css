@@ -1,6 +1,15 @@
 
 .messageBox {
+	position:relative;
 	width: 550px;
+	cursor: pointer;
+}
+
+.messageBoxTitle {
+	font-weight: 300;
+	font-size: 14pt;
+	text-align:center;
+	margin-bottom: 20px;
 }
 
 .message {
@@ -24,7 +33,23 @@
 	margin-right: 100px;
 	overflow: hidden;
 	font-size: 11pt;
+	margin-top: 10px;
 }
+.message_message .textdisplay{
+	padding-left: 5px;
+}
+
+.message_message .textedit{
+	display: none;
+	width: 100%;
+	width: calc(100% - 5px);
+	-webkit-box-sizing: border-box; /* Safari/Chrome, other WebKit */
+  	-moz-box-sizing: border-box;    /* Firefox, other Gecko */
+  	box-sizing: border-box;         /* Opera/IE 8+ */
+  	padding: 5px;
+  	font-size: 10pt;
+}
+
 
 .message_time {
 	position:absolute;
@@ -32,16 +57,42 @@
 	top: 5px;
 }
 
-.edit {
+.editButton {
 	position:absolute;
 	right: 5px;
 	bottom: 5px;
-	width:16px;
-	height:16px;
-	border-radius: 8px;
-	background-color: rgb(134, 17, 45);
+	/*text-decoration: underline;*/
+	color: rgb(134, 17, 45);
 }
 
-.edit:hover{
-	background-color: black;
+.editButton:hover{
+	color: black;
 }
+
+.saveButton {
+	display: none;
+	position: absolute;
+	bottom: 5px;
+	right: 5px;
+}
+
+.deleteButton {
+	background-image: linear-gradient(#e63d45, #c11a22);
+	border-radius: 3px;
+	border: 1px solid #B63137;
+	box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.22);
+	color: white;
+	cursor: pointer;
+	height: 19px;
+	padding: 1px 3px 4px;
+	position: absolute;
+	right: -25px;
+	top: 2px;
+	width: 19px;
+}
+
+.deleteButton:hover {
+	background-image: linear-gradient(#292727, #5A5757);
+	border: 1px solid rgb(53, 51, 51);
+}
+

@@ -25,12 +25,26 @@ module.exports.createMessage = function(userid, msg, fn){
 }
 
 module.exports.editMessage = function(msgId, msg, fn){
-	// should i check userid = msg?
-	Message.find({message_id: msgId}, function(e, message){
-		if (e) fn(false);
-		else {
-			message.editMessage(msg);	
-			fn(true);
-		}
-	});
+	Message.findOneAndUpdate(
+		{_id: msgId}, 
+		{message: msg, modified: Date.now()},
+		{upsert: true}, 
+		function(err, msg){
+			if (err)
+				fn(err, false);
+			else if (msg)
+				fn(null, true);
+			else fn(null, false);
+
+		});
+}
+
+module.exports.removeMessage = function(msgId, fn){
+	Message.findOneAndRemove(
+		{_id: msgId}, 
+		function(err, msg){
+			if (err) fn(err, false);
+			else if (msg) fn(null, true);
+			else fn(null, false);
+		});
 }
