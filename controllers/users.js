@@ -2,7 +2,6 @@
 	related to the users database and the corresponding view.
 */
 
-//	Module dependencies 
 var mongoose = require('mongoose');
 var User = require('../models/user');
 module.exports = {};
@@ -13,9 +12,10 @@ module.exports = {};
 
 	fn: A callback function that takes in a boolean representing
 		success of failure.
+		fn(err, success)
 */
 module.exports.createUser = function(user_name, pass_word, fn){
-	// If not taken, create new user
+	// Creates a new user
 	var newUser = new User({
 		username: user_name,
 		password: pass_word
@@ -24,16 +24,14 @@ module.exports.createUser = function(user_name, pass_word, fn){
 	// Save the new user in the database
 	newUser.save(function(err) {
 		if (err){ 
+			// If error is that username is taken, send back false
 			if (err.code === 11000){
-				fn(false);
+				fn(null, false);
 			}
-			else {
-				throw err;
-			}
+			// Else, send back error
+			else fn(err, false);
 		}
-		else {
-			fn(true);
-		}
+		else fn(null, true);
 	});		
 }
 
@@ -42,23 +40,28 @@ module.exports.createUser = function(user_name, pass_word, fn){
 		success of failure.
 	
 	If the cookies exist and are correct, it will set a new user session, 
-	and call fn(true)
-	If not, it will clear the cookies and call fn(false) 
+	and call fn(err,true)
+	If not, it will clear the cookies and call fn(err,false) 
 */
 module.exports.loginUserWithCookie = function(req, fn){
 	if (!req.cookies)
-		return fn(false);
+		return fn(null,false);
+
+	// Tries to authenticate user with cookie paramters
 	module.exports.authenticateUser(req.cookies.user, req.cookies.pass, 
 		function(err, isMatch){
-			if (err) throw err;
+			if (err) fn(err,false);
+
+			// If it works, it sets new user session
 			if (isMatch){
 				module.exports.setUserSession(req.cookies.user, req);	
-				fn(true);
+				fn(null,true);
 			} 
+			// If it doesn't, it clears the cookies
 			else {
 				res.clearCookie('user');
 				res.clearCookie('pass');
-				fn(false);
+				fn(null,false);
 			}	
 		});
 }
@@ -68,36 +71,40 @@ module.exports.loginUserWithCookie = function(req, fn){
 		success of failure.
 	
 	If the un/pw combo is correct, it will set the cookies and session
-		and call fn(true)
+		and call fn(null,true)
 
-	If not, it will call fn(false) 
+	If not, it will call fn(err,false) 
 */
 module.exports.loginUser = function(un, pw, req, res, fn){
 	module.exports.authenticateUser(un, pw,
 		function(err, isMatch){
-			if (err) throw err;
+			// If error
+			if (err) fn(err, false);
+			// If there is a match, set user session and cookies
 			if (isMatch){
 				// Sets cookies and session
 				res.cookie('user', un, {maxAge: 900000});
 				res.cookie('pass', pw, {maxAge: 900000});
 				module.exports.setUserSession(un, req);
-				fn(true);
+				fn(null,true);
 			}
+			// If it is not a database error, but it does not match
 			else {
-				fn(false);
+				fn(null,false);
 			}
 		});
 }
-
+/* 	Function to create log out a user
+*/
 module.exports.logoutUser = function(req, res){
 	res.clearCookie('user');
 	res.clearCookie('pass');
 	module.exports.clearSession(req);
-	debugger;
 }
 
-/* 	Function to check if the user exists and the password is correct
-
+/* 	Helper function for logging in users (either with cookie or normally)
+	Function to check if the user exists and the password is correct
+	
 	user_name is the username of user to test
    	pass_word is the password to authenticate with
    	fn is a callback function which takes (error, isMatch) as a result 
@@ -106,7 +113,7 @@ module.exports.authenticateUser = function(user_name, pass_word, fn){
 	User.findOne({username: user_name},
 		function(err, user){
 			if (err)
-				return fn(err);
+				return fn(err, false);
 			else if (user)
 				// user exists
 				return user.comparePassword(pass_word, fn);	

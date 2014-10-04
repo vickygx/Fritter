@@ -17,9 +17,13 @@
     <!-- Javascript -->
     <script type="text/javascript">
     	$(document).ready(function(){
+            
+            // If there is an error, display it
     		<%if (locals.error) {%>
     			var someerror = "<%= error %>";
 	            $('#body').append(SignupLoginWidget('signup', someerror, true));	
+
+            // Just show normal login widget
 	        <% } else { %>
 	        	$('#body').append(SignupLoginWidget('signup', null, true));	
 	        <% } %>	

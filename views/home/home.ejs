@@ -17,7 +17,8 @@
     <script type="text/javascript">
       $(document).ready(function(){
         var msgs = <%- JSON.stringify(messages) %>;
-        addEditableMessages(msgs, '.messageBox');
+        var MsgModule = MessageModule();
+        MsgModule.addEditableMessages(msgs, '.messageBox');
       });
     </script>
   </head>

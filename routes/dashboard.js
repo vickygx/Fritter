@@ -5,6 +5,8 @@ var Messages = require('../models/message');
 
 /* GET: Dashboard page request */
 router.get('/', function(req, res) {
+
+	// Finds and sends all users and tweets to dashboard page
   	User.find({}, function(e, users){
   		if (e || !users) users = [];
   		Messages.find({}, function(e, messages){

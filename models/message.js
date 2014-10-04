@@ -7,7 +7,6 @@ var mongoose = require('mongoose')
 
 var MessagesSchema = new Schema({
 	user: {type: String, required: true},
-	message_id: {type: Number, required: true},
 	message: {type: String, required: true},
 	created: {type: Date, required: true},
 	modified: {type: Date, required: true}

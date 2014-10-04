@@ -16,12 +16,16 @@
     <!-- Javascript -->
     <script type="text/javascript">
       $(document).ready(function(){
+        
+        // If error exists, display in login widget
         <%if (locals.error) {%>
           var someerror = "<%= error %>";
             $('#body').append(SignupLoginWidget('authenticate', someerror, false)); 
-          <% } else { %>
-            $('#body').append(SignupLoginWidget('authenticate', null, false));  
-          <% } %> 
+
+        // Show normal signup login widget
+        <% } else { %>
+          $('#body').append(SignupLoginWidget('authenticate', null, false));  
+        <% } %> 
     });
     </script>
   </head>

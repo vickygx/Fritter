@@ -17,7 +17,8 @@
     <script type="text/javascript">
       $(document).ready(function(){
         var msgs = <%- JSON.stringify(messages) %>;
-        addDisplayMessages(msgs, '.TweetsContainer');
+        var MsgModule = MessageModule();
+        MsgModule.addDisplayMessages(msgs, '.TweetsContainer');
       });
     </script>
 

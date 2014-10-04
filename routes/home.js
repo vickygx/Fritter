@@ -5,6 +5,7 @@ var MessagesController = require('../controllers/messages');
 
 /* GET: Home page request */
 router.get('/', function(req, res) {
+	
 	// Renders home page if logged in
 	if (req.session.user){
 		var currentUser = req.session.user;
@@ -27,20 +28,20 @@ router.post('/message', function(req, res){
 	var msg = req.body.message;
 	var userid = req.session.user;
 
-	MessagesController.createMessage(userid, msg, function(success){
+	// If message is success, home page is shown, else error page
+	MessagesController.createMessage(userid, msg, function(err, success){
 		if (success) res.redirect("/home");
-		else res.render('error');
+		else res.render('error', {error: err});
 	})
 });
 
 /* POST: Delete message request */
 router.post('/deletemessage/:id', function(req, res){
 	var msgId = req.params.id;
+
+	// If remove message is successful, home page is shown, else error page
 	MessagesController.removeMessage(msgId, function(err, success){
-		if (err) {
-			console.log('messages delete error');
-			// do something with error
-		}
+		if (err) res.render('error', {error: err});
 		else if (success) res.redirect('/home');
 		else res.render('error');
 	});
@@ -52,12 +53,10 @@ router.post('/editmessage/:id', function(req, res){
 	var msgId = req.params.id;
 	var msg = req.body.newmessage;
 
+	// If edit is successful, home page is shown, else error
 	MessagesController.editMessage(msgId, msg, function(err, success){
-		if (err) {
-			res.render('error');
-		}
-		else if (success) res.redirect('/home');
-		else res.render('error');
+		if (success) res.redirect('/home');
+		else res.render('error', {error: err});
 	});
 });
 
