@@ -61,21 +61,21 @@ Many argue that one of the many benefits of MongoDB is that it is schemaless. Ho
 
 I first weighed several options:
 	
-	a) Having one large document: User contains username, password, a list of messages
+a) Having one large document: User contains username, password, a list of messages
 	
-	b) Having several tables: User contains username, password. Message contains username, message information.
+b) Having several tables: User contains username, password. Message contains username, message information.
 
-	I opted for b) because while a) would provide fast retrieval of information for a specific user (i.e. showing each user their own mesages), it was not ideal for displaying tweets of all users, searching through tweets for some common feature, sorting tweets by date or even editing messages. Instead, such actions would require the retrieval/sort/search to go through another level in each object (user --> message_list --> message). For example, for a) editing messages would require fetching a user and then fetching a message. However, for b) editing messages would only require fetching the message object.
+I opted for b) because while a) would provide fast retrieval of information for a specific user (i.e. showing each user their own mesages), it was not ideal for displaying tweets of all users, searching through tweets for some common feature, sorting tweets by date or even editing messages. Instead, such actions would require the retrieval/sort/search to go through another level in each object (user --> message_list --> message). For example, for a) editing messages would require fetching a user and then fetching a message. However, for b) editing messages would only require fetching the message object.
 
-	Meanwhile, we can still search through all the messages with a given username pretty fast since the username is a top-level attribute of messages.
+Meanwhile, we can still search through all the messages with a given username pretty fast since the username is a top-level attribute of messages.
 
-	Benefit: 
-		- Implementation of needed features was very simple
-		- Fast access
-		- Clear concept
+Benefit: 
+	- Implementation of needed features was very simple
+	- Fast access
+	- Clear concept
 
 
-	3) Relationships Schema (Will talk about in part ii)
+3) Relationships Schema (Will talk about in part ii)
 
 
 
@@ -107,24 +107,25 @@ V. Design Benefits
 	- Storing Date objects allow us to transfer the later json encodded string back to a date and thus display date's in different versions. I.e. I can show year, month and/or day by some logic (as I do) instead of just displaying a String that was saved right at message creation.
 
 3) Modules
-	- This is more of a design benefit for the code, but by creating modules for messages and login/signup, I can 
+	
+- This is more of a design benefit for the code, but by creating modules for messages and login/signup, I can :
 	1) modify the look and functionality very easily by replacing just the module files
 	2) Make many copies of either messages or login/signup boxes so that I can put them on different routes/pages.
 
-	Note: I decided to put them in a separate module folder under public instead of putting it into css and javascript because it is easier to understand and see the difference between page css/javascript and css/javascript related only to specific parts of the page (i.e. modules).
+Note: I decided to put them in a separate module folder under public instead of putting it into css and javascript because it is easier to understand and see the difference between page css/javascript and css/javascript related only to specific parts of the page (i.e. modules).
 
 4) View separation into dashboard, home and user instead of user and index.
 
-	I made the views separate into dashboard, home and user because I felt that the dashboard could be a feature that contains many other features. For example, your dashboard (which shows other users and tweets) can only show you various modified dashboards by extending that view.
-		dashboard/followed -- show a dashboard of tweets form people you follow
-		dashboard/<interest> -- show a dashboard of tweets based on an interest
-	I also made home by itself because ths would take care of all user-specific related pages. For the future, this could be
-		home/account
-		home/my-tweets
-		home/my-followers
-	Index takes care of all the required views for getting setup with the site (landing, logging in, and signup).
+I made the views separate into dashboard, home and user because I felt that the dashboard could be a feature that contains many other features. For example, your dashboard (which shows other users and tweets) can only show you various modified dashboards by extending that view.
+	dashboard/followed -- show a dashboard of tweets form people you follow
+	dashboard/interest -- show a dashboard of tweets based on an interest
+I also made home by itself because ths would take care of all user-specific related pages. For the future, this could be
+	home/account
+	home/my-tweets
+	home/my-followers
+Index takes care of all the required views for getting setup with the site (landing, logging in, and signup).
 
-	Thus, the view separation has been built and structured by keeping future possible features in mind and grouping them together.
+Thus, the view separation has been built and structured by keeping future possible features in mind and grouping them together.
 
 
 B. File Structure
@@ -159,7 +160,7 @@ public/:
 	javascripts/: contains all javascript used in pages
 	modules/: contains modules
 	stylesheets/: conains all css used in pages
-	
+
 public/modules:
 	message/: contains js & css related to module that renders
 		the individual messages.
