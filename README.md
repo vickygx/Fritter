@@ -141,6 +141,21 @@ public/modules:
 	signup-login/: contains js & css related to module that renders
 		both signup and login box.
 
+C. UI
+==========
+Design is currently structured in the following ways:
+/: Is the landing page where users can sign up
+/login: Is the page where users can login
+/home: Is an authenticated user's home page of his/her tweets
+	   Also where user can create, edit and delete tweets
+/dashboard: Is where any user / visited can see tweets and
+	current users.
+
+Things I will be working on for next steps:
+- Making tweets ordered by modified date
+- Having a navigation bar instead of text links to get to different pages
+
+
 C. Viewing
 =============
 http://fritter-vickyg.rhcloud.com/

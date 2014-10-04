@@ -163,12 +163,13 @@ var MessageModule = function(){
 				.css('display', 'block')
 				.val(currentText);
 
+			// Hide own button
+			$(this).css('display', 'none');
+
 			// Show save button
 			parent.find('.saveButton')
 				.css('display', 'block');
 
-			// Hide own button
-			$(this).css('display', 'none');
 		});
 	};
 
@@ -177,7 +178,8 @@ var MessageModule = function(){
 	*/
 	var setSave = function(classname){
 		$('.' + classname).click(function(){
-			var parent = $(this).parent();
+			var saveButton = $(this);
+			var parent = saveButton.parent();
 			var msgId = parent.attr('id');
 
 			// Gets current value in input and hides it 
@@ -185,21 +187,23 @@ var MessageModule = function(){
 			var newMessage = textedit.val();
 			textedit.css('display', 'none');
 			
-			// TODO: put everything below under success
-			$.post('/home/editmessage/' + msgId,
-				{ 'newmessage': newMessage});
-			
-			// Updates textdisplay and shows it
-			var textdisplay = parent.find('.textdisplay');
-			var currentText = textdisplay.html(newMessage);
-			textdisplay.css('display', 'block');
-			
-			// Show edit button
-			parent.find('.editButton')
-				.css('display', 'block');
+			var successFunction = function(){
+				// Updates textdisplay and shows it
+				var textdisplay = parent.find('.textdisplay');
+				var currentText = textdisplay.html(newMessage);
+				textdisplay.css('display', 'block');
+				
+				// Hide save button
+				saveButton.css('display', 'none');
 
-			// Hide save button
-			$(this).css('display', 'none');
+				// Show edit button
+				parent.find('.editButton')
+					.css('display', 'block');
+			}
+
+			// Make a post request to edit message
+			$.post('/home/editmessage/' + msgId, { 'newmessage': newMessage}, successFunction);		
+			
 		});
 	};
 
@@ -211,11 +215,12 @@ var MessageModule = function(){
 			var parent = $(this).parent();
 			var msgId = parent.attr('id');
 
-			// TODO: put everything below under success
-			$.post('/home/deletemessage/' + msgId);
-			
-			// Remove from view
-			parent.remove();	
+			// Makes a post request to delete
+			$.post('/home/deletemessage/' + msgId, 
+					function(){
+						// Removes message if successfully deleted
+						parent.remove();	
+					});
 		});
 	};
 
