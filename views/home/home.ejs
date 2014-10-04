@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title><%= title %></title>
+    <!-- Jquery -->
+    <script type="text/javascript" src="/javascripts/jquery-2.1.1.min.js"></script>
+
+    <!-- Modules -->
+    <link rel='stylesheet' href='/modules/message/message.css' />
+    <script type="text/javascript" src="/modules/message/message.js"></script>
+
+    <!-- Style Sheets -->
+    <link rel='stylesheet' href='/stylesheets/general.css' />
+    <link rel='stylesheet' href='/stylesheets/homepage.css' />
+
+    <!-- Javascript -->
+    <script type="text/javascript">
+      $(document).ready(function(){
+        var msgs = <%- JSON.stringify(messages) %>;
+        addEditableMessages(msgs, '.messageBox');
+      });
+    </script>
+  </head>
+  <body>
+    <!-- Navigation -->
+    <div><a href="/dashboard"> Dashboard </a></div>
+    <!-- Logout -->
+    <form action="/logout" method="post">
+      <div class="logout" onclick="parentNode.submit()">Logout?</div>
+    </form>
+    
+    <!-- Titles -->
+    <h1 class="thinTitle"><%= title %></h1>
+    <h3 class="thinTitle"> Welcome <%= username %> </h3>
+
+    <!-- Tweeting box -->
+    <div class="tweetingBox"> 
+        <form name="input" action="/home/message" method="post">
+        <input type="text" name="message" class="TweetInput" placeholder="What are you thinking?">
+        <input type="submit" value="TWEET" class="TweetSubmit">
+        </form>
+    </div>
+
+    <!-- Box to contain user's messages -->
+    <div class="messageBox">
+      <div class="messageBoxTitle">My Tweets</div>
+    </div>
+    
+  </body>
+</html>

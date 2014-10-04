@@ -2,17 +2,23 @@
 <html>
   <head>
     <title><%= title %></title>
+    <!-- Modules -->
+    <link rel='stylesheet' href='/modules/signup-login/signup-login.css' />
+    <script type="text/javascript" src="modules/signup-login/signup-login.js"> </script>  
+
+    <!-- Style Sheets -->
     <link rel='stylesheet' href='/stylesheets/general.css' />
-    <link rel='stylesheet' href='/stylesheets/login.css' />
-    <link rel='stylesheet' href='/stylesheets/signup-login.css' />
+    <link rel='stylesheet' href='/stylesheets/loginpage.css' />  
+
+    <!-- Jquery -->
     <script type="text/javascript" src="javascripts/jquery-2.1.1.min.js"></script>
-    <script type="text/javascript" src="javascripts/signup-login.js"> 
-    </script>
+
+    <!-- Javascript -->
     <script type="text/javascript">
       $(document).ready(function(){
         <%if (locals.error) {%>
           var someerror = "<%= error %>";
-              $('#body').append(SignupLoginWidget('authenticate', someerror, false)); 
+            $('#body').append(SignupLoginWidget('authenticate', someerror, false)); 
           <% } else { %>
             $('#body').append(SignupLoginWidget('authenticate', null, false));  
           <% } %> 

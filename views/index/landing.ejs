@@ -2,12 +2,19 @@
 <html>
   <head>
     <title><%= title %></title>
+
+    <!-- Modules -->
+    <script type="text/javascript" src="modules/signup-login/signup-login.js"> </script>
+    <link rel='stylesheet' href='/modules/signup-login/signup-login.css' />
+
+    <!-- Style Sheets -->
     <link rel='stylesheet' href='/stylesheets/general.css' />
-    <link rel='stylesheet' href='/stylesheets/index.css' />
-    <link rel='stylesheet' href='/stylesheets/signup-login.css' />
+    <link rel='stylesheet' href='/stylesheets/landingpage.css' />
+    
+    <!-- Jquery -->
     <script type="text/javascript" src="javascripts/jquery-2.1.1.min.js"></script>
-    <script type="text/javascript" src="javascripts/signup-login.js"> 
-    </script>
+
+    <!-- Javascript -->
     <script type="text/javascript">
     	$(document).ready(function(){
     		<%if (locals.error) {%>
@@ -21,6 +28,5 @@
   </head>
   <body id="body">
     <h1 id="title"><%= title %></h1>
-
   </body>
 </html>

@@ -2,39 +2,19 @@ var express = require('express');
 var router = express.Router();
 var controller = require('../controllers/users');
 
+//  ------------------ GETTING PAGES ----------------------//
+
 /* GET: Landing page request */
 router.get('/', function(req, res) {
-  res.render('index', { title: 'Fritter' });
-});
-
-module.exports = router;
-
-/* POST: Sign up request */
-router.post('/signup', function(req, res){
-	controller.createUser(req.body.username, req.body.password,
-		function(success){
-			if (success)
-				controller.loginUser(req.body.username, req.body.password, req, res,
-					function(success){
-						if (success)
-							res.redirect("/users/home");
-						else 
-							res.redirect("/users");			
-					})
-				
-			else {
-				res.render('index', 
-  			   {title: 'Fritter', error: "Username is taken"});
-			}
-		});
+ 	res.render('index/landing', { title: 'Fritter' });
 });
 
 /* GET: Signup page request */ 
 router.get('/signup', function(req, res) {
-  	res.render('index', { title: 'Fritter' });
+  	res.render('index/landing', { title: 'Fritter' });
 });
 
-/* Routes to login page */
+/* GET: Login page request */
 router.get('/login', function(req, res){
 	// If cookies do not exist, let them log in
 	console.log(req.cookies);
@@ -46,7 +26,7 @@ router.get('/login', function(req, res){
 	else {
 		controller.loginUserWithCookie(req, function(success){
 			if (success)
-				res.redirect('users/home');
+				res.redirect('/home');
 			else {
 				res.render('index/login', {title: 'Log in'});
 			}
@@ -54,22 +34,45 @@ router.get('/login', function(req, res){
 	}
 });
 
-/* Authenticates a user and signs them in */
+
+//  ------------------ REQUESTING ----------------------//
+
+/* POST: Sign up request */
+router.post('/signup', function(req, res){
+	controller.createUser(req.body.username, req.body.password,
+		function(success){
+			if (success)
+				controller.loginUser(req.body.username, req.body.password, req, res,
+					function(success){
+						if (success)
+							res.redirect("/home");
+						else 
+							res.redirect("/");			
+					})
+				
+			else {
+				res.render('index/landing', 
+  			   {title: 'Fritter', error: "Username is taken"});
+			}
+		});
+});
+
+/* POST: Log out request*/
+router.post('/logout', function(req, res){
+	controller.logoutUser(req, res);
+	res.redirect('/');
+});
+
+/* POST: Sign in request */
 router.post('/authenticate', function(req, res){
 	controller.loginUser(req.body.username, req.body.password, req, res, function(success){
 		if (success)
-			res.redirect('users/home');
+			res.redirect('/home');
 		else {
 			res.render('index/login', 
-	  			   			{title: 'Log in', error: "Username/Password is incorrect"});
+	  			   	   {title: 'Log in', error: "Username/Password is incorrect"});
 		}
 	});
 });
 
-/* Logs out a user */
-router.post('/logout', function(req, res){
-	res.clearCookie('user');
-	res.clearCookie('pass');
-	controller.clearSession(req);
-	res.redirect('/');
-});
+module.exports = router;

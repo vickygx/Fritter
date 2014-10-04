@@ -1,0 +1,40 @@
+.FritterUsersContainer {
+	box-shadow: 1px 1px 2px 1px rgba(0, 0, 0, 0.22);
+	position: fixed;
+	display: inline-block;
+	vertical-align: top;
+	right: 10px;
+	height: 300px;
+	width: 130px;
+	border-radius: 6px;
+	overflow: hidden;
+	text-align: center;
+	background-color: rgb(134, 17, 45);
+}
+
+.FritterUserTitle{
+	font-weight: 300;
+	color: white;
+	font-size: 13pt;
+}
+
+.FritterUsers {
+	background-color: white;
+	overflow-y: scroll;
+	height: 233px;
+	width: 100%;
+	padding: 5px;
+}
+
+.TweetsContainer {
+	position:relative;
+	width: 550px;
+	cursor: pointer;
+	margin: 0 auto;
+	vertical-align: top;
+}
+
+/* Message style override */
+.message {
+	background-color: rgb(209, 215, 224);
+}

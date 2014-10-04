@@ -89,6 +89,13 @@ module.exports.loginUser = function(un, pw, req, res, fn){
 		});
 }
 
+module.exports.logoutUser = function(req, res){
+	res.clearCookie('user');
+	res.clearCookie('pass');
+	module.exports.clearSession(req);
+	debugger;
+}
+
 /* 	Function to check if the user exists and the password is correct
 
 	user_name is the username of user to test

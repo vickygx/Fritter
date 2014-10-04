@@ -23,7 +23,8 @@ var db = mongoose.connect(dbURL);
 
 // routes setup
 var routes = require('./routes/index');
-var users_routes = require('./routes/users');
+var dashboard_routes = require('./routes/dashboard');
+var home_routes = require('./routes/home');
 
 // model setup
 var User = require('./models/user');
@@ -76,9 +77,9 @@ app.use(function(req, res, next) {
     next();
 });
 
-
 app.use('/', routes);
-app.use('/users', users_routes);
+app.use('/dashboard', dashboard_routes);
+app.use('/home', home_routes);
 
 // Setting up 404 
 app.use(function(req, res, next) {

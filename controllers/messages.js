@@ -1,5 +1,5 @@
 /* 	Controller that takes care of all the functionalities 
-	related to the users database and the corresponding view.
+	related to the messages database and the corresponding view.
 */
 
 //	Module dependencies 
@@ -48,3 +48,4 @@ module.exports.removeMessage = function(msgId, fn){
 			else fn(null, false);
 		});
 }
+
