@@ -3,12 +3,15 @@
   <head>
     <title><%= title %></title>
     <!-- Modules -->
-    <script type="text/javascript" src="/modules/message/message.js"></script>
-    <link rel='stylesheet' href='/modules/message/message.css' />
+    <script type="text/javascript" src="/modules/tweet/tweet.js"></script>
+    <link rel='stylesheet' href='/modules/tweet/tweet.css' />
+
+    <!-- Default -->
+    <script type="text/javascript" src="/javascripts/general.js"></script>
 
     <!-- Style Sheets -->
     <link rel='stylesheet' href='/stylesheets/general.css' />
-    <link rel='stylesheet' href='/stylesheets/userspage.css' />
+    <link rel='stylesheet' href='/stylesheets/dashboardpage.css' />
 
     <!-- Jquery -->
     <script type="text/javascript" src="/javascripts/jquery-2.1.1.min.js"></script>
@@ -16,9 +19,10 @@
     <!-- Javascript -->
     <script type="text/javascript">
       $(document).ready(function(){
-        var msgs = <%- JSON.stringify(messages) %>;
-        var MsgModule = MessageModule();
-        MsgModule.addDisplayMessages(msgs, '.TweetsContainer');
+        var twts = <%- JSON.stringify(tweets) %>;
+        var TwtModule = TweetModule();
+        TwtModule.addDisplayTweets(twts, '.TweetsContainer');
+        setup();
       });
     </script>
 
@@ -26,22 +30,28 @@
   <body>
     <!-- Navigation Links -->
     <div><a href="/home"> Go to home page </a></div>
-    <div><a href="/signup">Want to sign up? </a></div>
-    <div><a href="/login">Want to login? </a></div>
+    <form action="/signup" method="get">
+      <input type="submit" name="signup" value="Sign up" class="g-redbutton" />
+    </form>
+
+    <form action="/login" method="get">
+      <input type="submit" name="login" value="Log in" class="g-redbutton"/>
+    </form>
+
     <form action="/logout" method="post">
-      <span onclick="parentNode.submit()">Logout? </span>
+      <input type="submit" name="logout" value="Log out" class="g-redbutton"/>
     </form>
     
     <!-- Title -->
     <h1 class="thinTitle"><%= title %></h1>
 
     <!-- Box of Fritter Users -->
-    <div class="FritterUsersContainer">
-      <h3 class="FritterUserTitle"> Current fritters </h3>
-      <div class="FritterUsers">
+    <div class="g-fritteruserscontainer">
+      <h3 class="g-fritterusertitle"> Current fritters </h3>
+      <div class="g-fritterusers">
         <% for(var i = 0; i < individuals.length; i++){ %>
-        	<div class="FritterUser">
-        		@<%= individuals[i].username %>
+        	<div class="g-userlink">
+        		@<span class="g-username"><%= individuals[i].username %> </span>
         	</div>
         <%}%>
       </div>

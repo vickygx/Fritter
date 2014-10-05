@@ -24,11 +24,12 @@ var db = mongoose.connect(dbURL);
 var routes = require('./routes/index');
 var dashboard_routes = require('./routes/dashboard');
 var home_routes = require('./routes/home');
+var user_routes = require('./routes/user');
 
 // model setup
 var User = require('./models/user');
 var Relationships = require('./models/relationship');
-var Messages = require('./models/message');
+var Tweets = require('./models/tweet');
 
 // express setup
 var app = express();
@@ -81,6 +82,7 @@ app.use(function(req, res, next) {
 app.use('/', routes);
 app.use('/dashboard', dashboard_routes);
 app.use('/home', home_routes);
+app.use('/user', user_routes);
 
 // 404 setup 
 app.use(function(req, res, next) {

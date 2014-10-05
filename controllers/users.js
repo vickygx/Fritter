@@ -61,6 +61,7 @@ module.exports.loginUserWithCookie = function(req, fn){
 			else {
 				res.clearCookie('user');
 				res.clearCookie('pass');
+				module.exports.clearSession(req);
 				fn(null,false);
 			}	
 		});
@@ -75,7 +76,7 @@ module.exports.loginUserWithCookie = function(req, fn){
 
 	If not, it will call fn(err,false) 
 */
-module.exports.loginUser = function(un, pw, req, res, fn){
+module.exports.loginUserInput = function(un, pw, req, res, fn){
 	module.exports.authenticateUser(un, pw,
 		function(err, isMatch){
 			// If error
@@ -121,6 +122,15 @@ module.exports.authenticateUser = function(user_name, pass_word, fn){
 				return fn(null, false);
 		});
 }
+
+module.exports.getAllUsers = function(fn){
+	return User.find({}, fn);
+}
+
+module.exports.getUser = function(username, fn){
+	return User.find({username: username}, fn);
+}
+
 
 /* 	Function to create to set a user session
 */

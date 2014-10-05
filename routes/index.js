@@ -16,9 +16,9 @@ router.get('/signup', function(req, res) {
 
 /* GET: Login page request */
 router.get('/login', function(req, res){
-	// If cookies do not exist, let them log in
-	console.log(req.cookies);
-	if (!req.cookies || !req.cookies.user || !req.cookies.pass ){
+	// If cookies or session do not exist, let them log in
+	if (( !req.cookies || !req.cookies.user || !req.cookies.pass ) && !req.session.user){
+		console.log("Cookies do not exist");
 		res.render('index/login',
 				  {title: 'Log in'});
 	}
@@ -34,6 +34,7 @@ router.get('/login', function(req, res){
 
 			// If login with cookies did not work, send them to login page
 			else {
+				console.log("Logging in with cookies did not work");
 				res.render('index/login', {title: 'Log in'});
 			}
 		});
@@ -49,7 +50,7 @@ router.post('/signup', function(req, res){
 		function(err, success){
 			// If user was success, login the user
 			if (success)
-				controller.loginUser(req.body.username, req.body.password, req, res,
+				controller.loginUserInput(req.body.username, req.body.password, req, res,
 					function(err, success){
 						if (err) res.render('error', {error: err});
 
@@ -82,7 +83,7 @@ router.post('/logout', function(req, res){
 
 /* POST: Login request */
 router.post('/authenticate', function(req, res){
-	controller.loginUser(req.body.username, req.body.password, req, res, function(err, success){
+	controller.loginUserInput(req.body.username, req.body.password, req, res, function(err, success){
 		if (err) res.render('error', {error: err});
 		
 		// If successful login, bring user to home

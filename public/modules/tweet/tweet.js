@@ -1,47 +1,68 @@
 /*	Javascript file taking care of 
-	Messages' Viewer 
+	Tweet's Viewer 
 	This includes creating the modules and setting up the properties
-*/
-var MessageModule = function(){
 
-	/* 	Function to create individual message widgets*/
-	var MessageWidget = function(message, canEdit){
-		var message_div = $('<div>').addClass('message');
-		message_div.attr('id', message._id);
+	Dependents: general.js's user links
+*/
+var TweetModule = function(){
+
+	/* 	Function to create individual tweet widgets*/
+	var TweetWidget = function(tweet, canEdit){
+		var tweet_div = $('<div>').addClass('tweet');
+		tweet_div.attr('id', tweet._id);
 
 		// Creating user display
-		var message_user = $('<div>')
-			.addClass('message_user')
-			.addClass('message_type')
-			.html('@' + message.user);
+		var tweet_user = $('<div>')
+			.addClass('tweet_user');
 
-		message_div.append(message_user);
+		var owner_div = $('<span>')
+			.addClass('user_owner')
+			.addClass('user_names')
+			.addClass('g-userlink')
+			.html('@');
+
+		var owner_username = $('<span>')
+			.addClass('g-username')
+			.html(tweet.owner);
+
+		owner_div.append(owner_username);
+
+		tweet_user.append(owner_div);
+
+		// If tweet is a retweet
+		if (tweet['parent']){
+			var parent_div = $('<span>')
+				.addClass('user_parent')
+				.addClass('user_names')
+				.html('<> from ' + tweet['parent']);
+			tweet_user.append(parent_div);
+		}
+
+		tweet_div.append(tweet_user);
 
 		// Creating message display
-		var message_message = $('<div>')
-			.addClass('message_message')
-			.addClass('message_type');
+		var tweet_message = $('<div>')
+			.addClass('tweet_message');
 
 		var textdisplay = $('<span>')
 			.addClass('textdisplay')
-			.html(message.message);
+			.html(tweet.message);
 
 		var textedit = $('<input>')
 			.addClass('textedit')
 			.attr('type', 'text')
 			.attr('name', 'newmessage');
 
-		message_message.append(textdisplay);
-		message_message.append(textedit);
-		message_div.append(message_message);
+		tweet_message.append(textdisplay);
+		tweet_message.append(textedit);
+		tweet_div.append(tweet_message);
 
 		// Creating time display
-		var message_time = $('<div>')
-			.addClass('message_time')
-			.addClass('message_type')
-			.html(getLogicDisplayTime(message.modified));
+		var tweet_time = $('<div>')
+			.addClass('tweet_time')
+			.html(getLogicDisplayTime(tweet.modified));
 
-		message_div.append(message_time);
+		tweet_div.append(tweet_time);
 
 		if (canEdit){
 			// Creating Save button
@@ -50,7 +71,7 @@ var MessageModule = function(){
 				.attr('type', 'submit')
 				.html('Save');
 
-			message_div.append(save_button);
+			tweet_div.append(save_button);
 
 			// Creating Edit button
 			var edit_button = $('<button>')
@@ -58,7 +79,7 @@ var MessageModule = function(){
 				.attr('type', 'submit')
 				.html('Edit');
 
-			message_div.append(edit_button);
+			tweet_div.append(edit_button);
 
 			// Creating Delete button
 			var delete_button = $('<button>')
@@ -66,10 +87,10 @@ var MessageModule = function(){
 				.attr('type', 'submit')
 				.html('x');
 
-			message_div.append(delete_button);
+			tweet_div.append(delete_button);
 		}
 
-		return message_div;
+		return tweet_div;
 
 	};
 
@@ -124,31 +145,31 @@ var MessageModule = function(){
 	    return Math.floor(days) + ' days ago';
 	};
 
-	/*	Creates editable MessageWidget for all the Message objects in 
+	/*	Creates editable TweetWidget for all the Tweet objects in 
 		msgs and adds them to the selector  
 	*/
-	var addEditableMessages = function(msgs, selector){
-		for(var i = 0; i < msgs.length; i++){
-	        $(selector).append(MessageWidget(msgs[i], true));
+	var addEditableTweets = function(tweets, selector){
+		for(var i = 0; i < tweets.length; i++){
+	        $(selector).append(TweetWidget(tweets[i], true));
 	    }
 	    setEdit('editButton');
 	    setSave('saveButton');
 	    setDelete('deleteButton');
 	};
 
-	/*	Creates non-editable MessageWidget for all the Message objects in 
+	/*	Creates non-editable TweetWidget for all the Tweet objects in 
 		msgs and adds them to the selector  
 	*/
-	var addDisplayMessages = function(msgs, selector){
-		for(var i = 0; i < msgs.length; i++){
-	        $(selector).append(MessageWidget(msgs[i], false));
+	var addDisplayTweets = function(tweets, selector){
+		for(var i = 0; i < tweets.length; i++){
+	        $(selector).append(TweetWidget(tweets[i], false));
 	    }
 
 	};
 
-	// $.post('users/editmessage/' + msgid, )
-	// Make submit button of model send post request to edit message
-
+	/*	Adds functionality of editing tweets to all html objects
+		with the class <classname> 
+	*/
 	var setEdit = function(classname){
 		$('.' + classname).click(function(){
 			var parent = $(this).parent();
@@ -173,7 +194,7 @@ var MessageModule = function(){
 		});
 	};
 
-	/*	Adds functionality of saving messages to all html objects
+	/*	Adds functionality of saving tweets to all html objects
 		with the class <classname> 
 	*/
 	var setSave = function(classname){
@@ -181,13 +202,13 @@ var MessageModule = function(){
 			var saveButton = $(this);
 			var parent = saveButton.parent();
 			var msgId = parent.attr('id');
-
-			// Gets current value in input and hides it 
 			var textedit = parent.find('.textedit');
 			var newMessage = textedit.val();
-			textedit.css('display', 'none');
-			
+
 			var successFunction = function(){
+				// Hides itextinput
+				textedit.css('display', 'none');
+
 				// Updates textdisplay and shows it
 				var textdisplay = parent.find('.textdisplay');
 				var currentText = textdisplay.html(newMessage);
@@ -201,13 +222,13 @@ var MessageModule = function(){
 					.css('display', 'block');
 			}
 
-			// Make a post request to edit message
-			$.post('/home/editmessage/' + msgId, { 'newmessage': newMessage}, successFunction);		
+			// Make a post request to edit tweet
+			$.post('/home/edittweet/' + msgId, { 'newmessage': newMessage}, successFunction);		
 			
 		});
 	};
 
-	/*	Adds functionality of deleting messages to all html objects
+	/*	Adds functionality of deleting tweets to all html objects
 		with the class <classname> 
 	*/
 	var setDelete = function(classname){
@@ -216,9 +237,9 @@ var MessageModule = function(){
 			var msgId = parent.attr('id');
 
 			// Makes a post request to delete
-			$.post('/home/deletemessage/' + msgId, 
+			$.post('/home/deletetweet/' + msgId, 
 					function(){
-						// Removes message if successfully deleted
+						// Removes tweet if successfully deleted
 						parent.remove();	
 					});
 		});
@@ -226,8 +247,8 @@ var MessageModule = function(){
 
 
 	return {
-		'addEditableMessages': addEditableMessages,
-		'addDisplayMessages': addDisplayMessages
+		'addEditableTweets': addEditableTweets,
+		'addDisplayTweets': addDisplayTweets
 	}
 
 }

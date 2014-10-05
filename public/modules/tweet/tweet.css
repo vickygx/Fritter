@@ -5,36 +5,42 @@
 	margin-bottom: 20px;
 }
 
-.message {
+.tweet {
 	padding: 5px;
 	position: relative;
 	border-radius:6px;
     box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.22);
     margin: 5px;
     background-color: white;
+    border: 1px solid rgb(224, 224, 224);
 }
 
-.message:hover{
+.tweet:hover{
 	background-color: yellow;
 }
 
 
-.message_user{
+.tweet_user{
 	font-weight: bold;
 }
 
-.message_message {
+.tweet_user .user_names{
+	display: inline-block;
+	margin-right: 5px;
+}
+
+.tweet_message {
 	margin-right: 100px;
 	overflow: hidden;
 	font-size: 11pt;
 	margin-top: 5px;
 	
 }
-.message_message .textdisplay{
+.tweet_message .textdisplay{
 	padding-left: 5px;
 }
 
-.message_message .textedit{
+.tweet_message .textedit{
 	display: none;
 	width: 100%;
 	width: calc(100% - 5px);
@@ -46,7 +52,7 @@
 }
 
 
-.message_time {
+.tweet_time {
 	position:absolute;
 	right: 5px;
 	top: 5px;

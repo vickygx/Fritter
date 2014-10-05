@@ -18,3 +18,55 @@ body {
 	font-weight:300;
 	text-align:center;
 }
+
+.g-userlink {
+	text-decoration: none;
+	color: black;
+	cursor: pointer;
+}
+
+.g-userlink:hover {
+	color: rgb(134, 17, 45);
+	font-weight: bold;
+}
+
+.g-username {
+
+}
+
+.g-redbutton {
+	padding: 10px 10px;
+	border: none;
+	background-image: linear-gradient(#e63d45, #c11a22);
+	border-radius: 3px;
+	border: 1px solid #B63137;
+	box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.22);
+	color: white;
+}
+
+.g-fritteruserscontainer {
+	box-shadow: 1px 1px 2px 1px rgba(0, 0, 0, 0.22);
+	height: 300px;
+	width: 130px;
+	border-radius: 6px;
+	overflow: hidden;
+	text-align: center;
+	/*background-color: rgb(134, 17, 45);*/
+	background-color: rgb(189, 51, 51);
+	z-index: 10;
+}
+
+.g-fritterusertitle{
+	font-weight: 300;
+	color: white;
+	font-size: 13pt;
+}
+
+.g-fritterusers {
+	background-color: white;
+	overflow-y: scroll;
+	height: 234px;
+	width: 100%;
+	width: calc(100% + 5px);
+	padding: 5px;
+}

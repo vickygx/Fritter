@@ -1,0 +1,11 @@
+.FOLLOW{
+	background-image: linear-gradient(#e63d45, #c11a22);
+	border: 1px solid #B63137;
+	color: white;
+}
+
+.UNFOLLOW{
+	background-image: linear-gradient(#a8a8a8, #b2b2b2) !important;
+	border: 1px solid #bbb !important;
+	color: white;
+}

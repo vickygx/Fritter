@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title><%= title %></title>
+    <!-- Jquery -->
+    <script type="text/javascript" src="/javascripts/jquery-2.1.1.min.js"></script>
+
+    <!-- Modules -->
+    <link rel='stylesheet' href='/modules/tweet/tweet.css' />
+    <script type="text/javascript" src="/modules/tweet/tweet.js"></script>
+
+    <link rel='stylesheet' href='/modules/follow-unfollow/follow-unfollow.css' />
+    <script type="text/javascript" src="/modules/follow-unfollow/follow-unfollow.js"></script>
+
+    <!-- Style Sheets -->
+    <link rel='stylesheet' href='/stylesheets/general.css' />
+    <link rel='stylesheet' href='/stylesheets/userpage.css' />
+
+    <!-- Javascript -->
+    <script type="text/javascript">
+      $(document).ready(function(){
+          // Adding Tweets of user
+          var twts = <%- JSON.stringify(tweets) %>;
+          var TwtModule = TweetModule();
+          TwtModule.addDisplayTweets(twts, '.tweetBox');
+
+          // Adding in Follow/ Unfollow button for authenticated user
+          var showButton = <%= isAuth %>; 
+          if (showButton){
+              var FUModule = FollowUnfollowModule();
+              if (<%= isFollowing %>)
+                FUModule.addUnfollowButton('.FollowContainer', '<%= username %>');
+              else 
+                FUModule.addFollowButton('.FollowContainer', '<%= username %>');
+          } 
+      });
+    </script>
+  </head>
+  <body>
+    <!-- Navigation -->
+    <div><a href="/dashboard"> Dashboard </a></div>
+    
+    <!-- Titles -->
+    <h1 class="thinTitle user">  @<%= username %> </h1>
+    <h4 class="thinTitle userinfo"> 
+      | <span id="tweetnum"><%= tweetnum %> </span> Tweets | 
+    </h4>
+
+    <!-- Temporary follow button -->
+    <div class="FollowContainer">
+    </div>
+
+    <!-- Box to contain user's messages -->
+    <div class="tweetBox">
+      <div class="tweetBoxTitle">past tweets</div>
+    </div>
+    
+  </body>
+</html>
