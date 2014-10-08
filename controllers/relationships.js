@@ -15,8 +15,6 @@ module.exports = {};
 		fn(err, success)
 */
 module.exports.follow = function(follower, followee, fn){
-	// Check if user exists
-
 	// Create a Relationship data object
 	var newRelationship = new Relationship({
 		followee: followee,
@@ -40,22 +38,29 @@ module.exports.unfollow = function(follower, followee, fn){
 		{follower: follower,
 		 followee: followee}, 
 		function(err, relate){
-			console.log("Trying to remove it and result:", relate);
 			if (err) fn(err, false);
 			else if (relate) fn(null, true);
 			else fn(null, false);
 		});
 }
 
-
+/*	Gets a list of people who follow username
+	fn: callback function 
+*/
 module.exports.getFollowers = function(username, fn){
 	return Relationship.find({followee: username}, fn);
 }
 
+/*	Gets a lit of people who username has followed
+	fn: callback function 	
+*/
 module.exports.getFollowed = function(username, fn){
 	return Relationship.find({follower: username}, fn);
 }
 
+/*	Checks if follower has followed followee
+	fn: callback function 
+*/
 module.exports.isFollowing = function(follower, followee, fn){
 	Relationship.find({follower: follower, followee: followee}, 
 		function(e, relate){

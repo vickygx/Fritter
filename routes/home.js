@@ -41,18 +41,6 @@ router.get('/', function(req, res) {
 	}
 });
 
-// router.get('/', function(req, res){
-// 	res.render('home/home');
-// });
-
-// router.get('/followers', function(req, res){
-// 	RelationshipsController.getFollowers(currentUser, 
-// 		function(e, followers){
-// 			res.json(followers);
-// 		});
-// });
-
-
 /* POST: Create tweet request */
 router.post('/tweet', function(req, res){
 	var msg = req.body.message;
@@ -75,16 +63,25 @@ router.post('/tweet', function(req, res){
 router.post('/deletetweet/:id', function(req, res){
 	var tweetId = req.params.id;
 
-	// TODO: check that owner of tweet is authuser 
+	// Checking that the signed in user is indeed the owner of the tweet 
+	var currentUser = req.session.user;
+	TweetsController.getUserTweet(currentUser, tweetId, function(err, success){
+		if (err) res.send({success: false});
 
-	// If remove tweet is successful, home page is shown, else error page
-	TweetsController.removeTweet(tweetId, function(err, success){
-		if (success) {
-			res.send({success: true});
+		// Current user is owner
+		else if (success){
+
+			// Remove the tweet
+			TweetsController.removeTweet(tweetId, function(err, success){
+				if (success) {
+					res.send({success: true});
+				}
+				else {
+					res.send({success: false});
+				}
+			});
 		}
-		else {
-			res.send({success: false});
-		}
+		else res.send({success: false});
 	});
 	
 });
@@ -93,21 +90,31 @@ router.post('/deletetweet/:id', function(req, res){
 	Accessed through AJAX
 */
 router.post('/edittweet/:id', function(req, res){
-
-	// TODO: check that owner of tweet is authuser 
-
 	var tweetId = req.params.id;
 	var msg = req.body.newmessage;
 
-	// If edit is successful, home page is shown, else error
-	TweetsController.editTweet(tweetId, msg, function(err, success){
-		if (success) {
-			res.send({success: true});
+	// Checking that the signed in user is indeed the owner of the tweet 
+	var currentUser = req.session.user;
+	TweetsController.getUserTweet(currentUser, tweetId, function(err, success){
+		if (err) res.send({success: false});
+
+		// Current user is owner
+		else if (success){
+
+			// Edit the tweet
+			TweetsController.editTweet(tweetId, msg, function(err, success){
+				if (success) {
+					res.send({success: true});
+				}
+				else {
+					res.send({success: false});
+				}
+			});
+			
 		}
-		else {
-			res.send({success: false});
-		}
+		else res.send({success: false});
 	});
+	
 });
 
 /* 	POST: Retweet request 
@@ -119,6 +126,7 @@ router.post('/retweet', function(req, res){
 	var owner = req.body.owner;
 
 	var authuser = req.session.user;
+	// If there is a user logged in, request the retweet
 	if (authuser){
 		TweetsController.reTweet(owner, msg, authuser, function(err, success){
 			if (success) {
@@ -129,6 +137,7 @@ router.post('/retweet', function(req, res){
 			}
 		});
 	}
+	// They cannot do a tweet
 	else {
 		res.send({redirect: null, success: false});
 	}

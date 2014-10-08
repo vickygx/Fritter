@@ -16,9 +16,10 @@ router.get('/:username', function(req, res) {
 			isFollowing = result;
 		});
 	}
-	// TODO: maybe reorg?? not sure if concurrency thing
 
+	// Checks if the user exists 
 	UserController.getUser(username, function(e, user){
+		
 		// Loads user's page if user exists
 		if (user && user.length !== 0){
 			TweetsController.getUserTweetsByModDate(username, 

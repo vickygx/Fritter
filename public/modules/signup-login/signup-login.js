@@ -1,3 +1,5 @@
+/*	Widget to create the Signup/Login view 
+*/
 function SignupLoginWidget(action, error, isSignup){
 	var signup = $('<div>').addClass('signup');
 	var form = $('<form>')

@@ -210,7 +210,7 @@ var TweetModule = function(){
 	*/
 	var setRetweet = function(selector){
 		$(selector).click(function(){
-			// Getting tweet message and owner VS. getting message id and accessing it in database?
+			// Getting tweet message and owner
 			var parent = $(this).parent();
 			var owner = parent.find('.user_owner').find('.g-username').html();
 			var msg = parent.find('.textdisplay').html();

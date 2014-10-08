@@ -101,6 +101,13 @@ module.exports.getUserTweets = function(username, fn){
 	return Tweet.find({owner: username}, fn);
 }
 
+/*	Gets the Tweet object owned by username
+	with id=tweetid
+*/
+module.exports.getUserTweet = function(username, tweetid, fn){
+	return Tweet.find({owner: username, _id: tweetid}, fn);
+}
+
 /*	Gets all the Tweet objects sorted by mod date
 */
 module.exports.getAllTweetsByModDate = function(fn){

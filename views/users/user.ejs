@@ -22,10 +22,10 @@
     <!-- Javascript -->
     <script type="text/javascript">
       $(document).ready(function(){
+
           // Adding Tweets of user
           var twts = <%- JSON.stringify(tweets) %>;
           var TwtModule = TweetModule();
-          console.log('<%= authUser %>');
           TwtModule.addTweets(twts, '.tweetBox', '<%= isAuth %>', '<%= authUser %>');
 
           // Adding in Follow/ Unfollow button for authenticated user

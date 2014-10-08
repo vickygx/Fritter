@@ -2,6 +2,7 @@ Fritter
 =====
 author: vickyg@mit.edu
 
+
 A. Design
 =============
 
@@ -14,9 +15,11 @@ This project is a clone of the twitter and aims to provide a space where users c
 	- view own tweets
 	- view tweets of others
 	- see other users
+	- follow other users
+	- visit user's page
+	- retweet other user's tweets
 
-The application is a Express Application built on MongoDB as its database. 
-
+The application is an Express Application built on MongoDB as its database. 
 
 
 II. Approach
@@ -40,13 +43,14 @@ The data model of this application revolves around three simple but important mo
 		- username (unique)
 		- password
 
-	Messages: Holds all the 'tweets' ever created on the website
-		- user ( which is the unique username, and needed to figure out who created the message )
+	Tweets: Holds all the 'tweets' ever created on the website
+		- owner ( which is the unique username, and needed to figure out who created the message )
 		- message ( the content of each tweet )
 		- created ( time it was created, so we sort by creation )
 		- modified (time it was modified, so we can sort by modified date)
+		- parent (if the tweet is a retweet, the parent points to the original owner)
 
-	Relationships: (Not used for part i)
+	Relationships: 
 		- followee (username of followee)
 		- follower (username of follower)
 
@@ -57,7 +61,7 @@ The data model of this application revolves around three simple but important mo
 
 Many argue that one of the many benefits of MongoDB is that it is schemaless. However, any good design also must have some data model, which is a less formalized version of a schema. Moreover, this project will soon contain many complicated relationships (relationships between users and message, users and other users) and features. Thus, I have decided to use Mongoose instead of Monk so that I can go through an object oriented approach in building my model. I also felt that using Mongoose allowed an easier way for me to modularize my code (MVC).
 
-2) Messages - Relational vs. embedded 
+2) Tweet + User Schema - Relational vs. embedded 
 
 I first weighed several options:
 	
@@ -75,14 +79,32 @@ Benefit:
 	- Clear concept
 
 
-3) Relationships Schema (Will talk about in part ii)
+3) Relationships Schema - Relational vs. embedded
+
+I also weight several options for this design:
+
+a) Having each user contain a list of those he/she has followed
+b) Having each user contain a list of followers and followees
+c) Having a separate table just showing the relationships
+
+I opted for c) because of the following points: 
+Analysis of a). The benefits of this design is that if we wanted to get a list of people a user has followed, it is quite simple. Updating a list of users (while it requires 2 layers of access) just needs to modify one user's object. If I wanted to retrieve a list of people who follow a certain user, however, I would have to search through every followed list of every user, which is very inefficient. 
+
+Analysis of b). The benefits of this design is that getting both followers and followees is quite simple. Creating updating or deleting a relationship, however, requires writing to two different users: One user's followers list and the other user's followees list. Moreover, this means there will be duplicated data (data is in both user's object).
+
+Analysis of c). The benefits of this design is that both creating/updating/deleting a relationship and finding out a relationship is quite simple. Creating a relationship is very simple in that you just set follower and followee and add it to the table. Updating/deleting a relationship just requires a simple query into the relationships table where followee or follower is defined, and simply removing it and for updating, creating a new one. Finding a relationship is a simple query as well with only either followee or follower defined. Neither of these functions require accessing the user table at all, whereas the above two required diving into the user's object.
+
+I ended up choosing c) because it gives the most flexibility in adding in new features related to followers/followees (such as showing filtered newsfeed as I describe below, showing a list of followers, showing a list of followees) and because it is very simple in both creation, editing and access.
+
+4) Schema for implementing retweeting
+I decided to just add another attribute to the Tweet schema (parent) because the very essence of a tweet and a re-tweet is quite similar. It means their message content is the same, and there is someone it comes from. We can copy over the message quite easily, and now we just need to hold the parent information which is the new attribute. Having them have the same schema means that a re-tweet still has all the same functionalities as a tweet (can edit, delete, etc) quite easily without much additional implemenetation. 
 
 
 
 IV. Additional Challenges & Design Choices
 ------------------------------------------
 
-1) Designing the edit/delete mechanism for messages
+1) Designing the edit/delete mechanism for tweets
 
 Figuring out the best way to edit/delete messages was a bit difficult. However, because I can easily access all messages through simply passing in the ID, I chose to store the model.ID as the div.ID of each div that contained the message. Although this was not as secure, it provided an easy way for handlers to make a proper post request. Any button can just get the ID of the parent div and use that as the paramters for a post.
 
@@ -93,8 +115,29 @@ I did think about implementing a hashing function so that the mongodb created ID
 There were two considerations I had: popping up a modal to change the message or using javascript to turn the text into an input box. I chose the latter because I felt it was easier for the user to make changes, and editing posts might be a more frequent habit.
 
 
-4) Time view
-For each message, I have a time display. 
+3) Designing the additional feature of retweeting
+At the moment a user chooses to retweet, there can be various possibilites that can occur. There were two which I considered to implement: 
+a) Get the tweet message and owner through event handling and passing that information to create a new tweet 
+b) Getting just the tweet id, finding the tweet in the database and use the information in the database to create a new tweet. 
+
+Although the latter makes sure that if a user A deletes one of his tweets and user B did not refresh and still sees that tweet and wants to retweet, user B can't actually retweet, I decided it was more important for the user doing the retweeting to be able to retweet exactly what he sees at the moment. Thus in the scenario where user A is editing his/her tweet and user B wants to retweet the original tweet, user B can do so without having to worry about whether user A is editing or not. The most optimal solution would actually to have the interface update so that all updates are reflecting in the user interface, but for the scope of this class, such real time updating of the ui is not implemented. 
+
+
+4) Designing the additional feature of followers
+There are numerous ways where you can have the feature of followers. 
+For my project, the main idea of followers is for any user to have a way to easily keep track of people who they are interested in, keep track of people who are interested in them and to see the content of these people, all for the larger goal of being able to discover and dive into a different relationships.
+
+Thus, I decided to implement this feature such that you can only follow a user when you land on a user's page (when a user lands on a user page, the entire focus is on that user). However, once you follow that user, that user will appear as a name in box on your right in your homepage, where clicking on the name brings you directly to their user page. Thus, this allows you to always easily access thier homepage again to see their tweets. There is also a box on the right telling you which users have followed you, and the reason for its prominient behavior is so that you can also see if you are interested in the people who are also interested in you. 
+
+I decided to leave the dashboard page a feed of ALL user's and not just of those you are following because it allows for more discovery of different people, and the tweets of those you follow and those who follow you can already be accessed through your home page (and through a more individual way).
+
+Once there are a lot more people on the site, however, the dashboard should certainly show a filtered newsfeed (or have the option to do so) because there will be many tweets that might not be of interest. However, since the website has a small user base as of now, I have decided to leave it out as part of a purposeful design decision. 
+
+I did, however, design the model with the idea that it could be easily extended to sure a filtered newsfeed. Here is what getting a filtered newsfeed entails:
+	- Find all Relationships where those you followed is the followee.
+	- Use that list as a query for finding messages with owner as those usernames.
+Thus, the implementation is quite easy with this design.
+	
 
 
 V. Design Benefits
@@ -176,10 +219,10 @@ Design is currently structured in the following ways:
 	   Also where user can create, edit and delete tweets
 /dashboard: Is where any user / visited can see tweets and
 	current users.
+/users: This holds the user page for each user where you can view their
+	tweets as well as see the number of tweets they have.
+	For example, a use would have /user/vicky>
 
-Things I will be working on for next steps:
-- Making tweets ordered by modified date
-- Having a navigation bar instead of text links to get to different pages
 
 
 C. Viewing

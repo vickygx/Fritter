@@ -18,6 +18,8 @@ var FollowUnfollowModule = function(){
 		return followbutton;
 	};
 
+	/* 	Sets the Follow - Unfollow click functionality
+	*/
 	var setFollowUnfollow = function(classname, followee){
 		$('.' + classname).click(function(){
 			var button = $(this);
@@ -50,12 +52,18 @@ var FollowUnfollowModule = function(){
 		});
 	};
 
+	/* 	Function to add a follow button 
+		This button follows / unfollows on followee
+	*/
 	var addFollowButton = function(selector, followee){
 		$(selector).append(FollowUnfollowWidget(FOLLOW_TYPE));
 		setFollowUnfollow('FollowButton', followee);
 
 	};
 
+	/*	Function to add a unfollow button 
+		This button follows / unfollows on followee
+	*/
 	var addUnfollowButton = function(selector, followee){
 		$(selector).append(FollowUnfollowWidget(UNFOLLOW_TYPE));
 		setFollowUnfollow('FollowButton', followee);

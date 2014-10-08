@@ -123,10 +123,14 @@ module.exports.authenticateUser = function(user_name, pass_word, fn){
 		});
 }
 
+/*	Gets a list of all the existing users 
+*/
 module.exports.getAllUsers = function(fn){
 	return User.find({}, fn);
 }
 
+/*	Gets a single user object with username 
+*/
 module.exports.getUser = function(username, fn){
 	return User.find({username: username}, fn);
 }

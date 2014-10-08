@@ -7,15 +7,26 @@
 	        Put any dom element with class="g-username" around the username text
 		    and it will be linked to user's webpage
 
+	2. Adding navigation bar
+			body must have id=body
+			the rest of the content should be in a div with class=g-content
+
 */
 
 
-// Must be the last function to be called in document.ready()
+/* 	Setup function
+		- Links user texts --> user pages
+		- Sets navigation bar
+
+	Must be the last function to be called in document.ready()
+*/
 var setup = function(){
 	setUserLinks('g-username');
 	setNavBar('#body');
 }
 
+/*	Function to set user links 
+*/
 var setUserLinks = function(className){
 	$("." + className).click(
 		function(){
@@ -24,11 +35,16 @@ var setUserLinks = function(className){
 		});
 }
 
+/*	Function to set navigation bar 
+*/
 var setNavBar = function(selector){
 	var navbar = createNavBar();
 	$(selector).append(navbar);
 }
 
+/*	Function to change the navigation bar to display
+	an authenticated user's name 
+*/
 var setNavBarToAuth = function(authUser){
 	// Hide Log in button
 	$('.g-navbar')
@@ -44,6 +60,8 @@ var setNavBarToAuth = function(authUser){
 	);
 }
 
+/*	Function to create a navigation bar 
+*/
 var createNavBar = function(){
 	var navbar = $('<div>')
 		.addClass('g-navbar');
@@ -103,5 +121,3 @@ var createNavBar = function(){
 	return navbar;
 
 }
-
-
