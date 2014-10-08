@@ -19,7 +19,7 @@ function SignupLoginWidget(action, error, isSignup){
 			.attr('for', 'password')
 			.html('Password'));
 	form.append($('<input>')
-			.attr('type', 'text')
+			.attr('type', 'password')
 			.attr('name', 'password')
 			.addClass('signupInput'));
 

@@ -9,6 +9,7 @@ var RelationshipsController = require('../controllers/relationships');
 router.get('/:username', function(req, res) {
 	var username = req.params.username;
 	var authUser = req.session.user;
+	var isAuth = authUser ? true : false;
 	var isFollowing = false;
 	if (authUser){
 		RelationshipsController.isFollowing(req.session.user, username, function(result){
@@ -28,6 +29,7 @@ router.get('/:username', function(req, res) {
 						 tweets: tweets,
 						 tweetnum: tweets.length,
 						 authUser: authUser,
+						 isAuth: isAuth,
 						 isFollowing: isFollowing});
 				});
 		}

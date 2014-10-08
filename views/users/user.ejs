@@ -25,7 +25,8 @@
           TwtModule.addTweets(twts, '.tweetBox', '<%= authUser %>');
 
           // Adding in Follow/ Unfollow button for authenticated user
-          var showButton = <%= authUser %>; 
+          var showButton = '<%= isAuth %>' === 'true' ? true : false; 
+          console.log('showButton', showButton);
           if (showButton){
               var FUModule = FollowUnfollowModule();
               if (<%= isFollowing %>)

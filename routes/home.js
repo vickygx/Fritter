@@ -73,6 +73,8 @@ router.post('/tweet', function(req, res){
 router.post('/deletetweet/:id', function(req, res){
 	var tweetId = req.params.id;
 
+	// TODO: check that owner of tweet is authuser 
+
 	// If remove tweet is successful, home page is shown, else error page
 	TweetsController.removeTweet(tweetId, function(err, success){
 		if (success) {
@@ -89,6 +91,9 @@ router.post('/deletetweet/:id', function(req, res){
 	Accessed through AJAX
 */
 router.post('/edittweet/:id', function(req, res){
+
+	// TODO: check that owner of tweet is authuser 
+
 	var tweetId = req.params.id;
 	var msg = req.body.newmessage;
 
