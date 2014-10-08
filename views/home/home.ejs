@@ -21,7 +21,7 @@
       $(document).ready(function(){
         var twts = <%- JSON.stringify(tweets) %>;
         var TwtModule = TweetModule();
-        TwtModule.addEditableTweets(twts, '.tweetBox');
+        TwtModule.addTweets(twts, '.tweetBox', '<%- authUser %>');
 
         setup();
       });
@@ -38,7 +38,7 @@
     
     <!-- Titles -->
     <h1 class="thinTitle"><%= title %></h1>
-    <h3 class="thinTitle"> Welcome <%= username %> </h3>
+    <h3 class="thinTitle"> Welcome <%= authUser %> </h3>
 
     <!-- Box of Followed users -->
     <div class="Followed">

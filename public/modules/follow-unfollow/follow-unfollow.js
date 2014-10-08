@@ -36,14 +36,16 @@ var FollowUnfollowModule = function(){
 			}
 
 			// successfunction should change html to opposite
-			var successFunction = function(){
-				button.removeClass(type)
-					.addClass(nextType)
-					.html(nextType);	
+			var successFunction = function(data, textStatus, jqXHR){
+				if (data.success){
+					button.removeClass(type)
+						.addClass(nextType)
+						.html(nextType);	
+				}
 			}
 
 			// send post request
-			$.post(postType, {'followee': followee}, successFunction)
+			$.post(postType, {'followee': followee}, successFunction, 'json')
 			
 		});
 	};

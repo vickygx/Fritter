@@ -20,14 +20,19 @@
 }
 
 
-.tweet_user{
-	font-weight: bold;
-}
-
 .tweet_user .user_names{
 	display: inline-block;
 	margin-right: 5px;
 }
+
+.tweet_user .user_owner {
+	font-weight: bold;
+}
+
+.tweet_user .user_parent {
+	font-size: 10pt;
+}
+
 
 .tweet_message {
 	margin-right: 100px;
@@ -64,6 +69,15 @@
 	bottom: 5px;
 	color: rgb(134, 17, 45);
 }
+
+.retweetButton {
+	position:absolute;
+	right: 5px;
+	bottom: 5px;
+	color: rgb(134, 17, 45);
+	padding: 2px 4px !important;
+}
+
 
 .editButton:hover{
 	color: black;

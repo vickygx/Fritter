@@ -8,13 +8,16 @@ var TweetController = require('../controllers/tweets');
 /* GET: Dashboard page request */
 router.get('/', function(req, res) {
 
+	var authUser = req.session.user;
+
     UserController.getAllUsers(function(e, users){
         var usrs = (e || !users) ? [] : users;
         TweetController.getAllTweetsByModDate(function(e, tweets){
           res.render('dashboard/dashboard', 
               {title: 'Welcome to Fritter', 
               'individuals': usrs,
-              'tweets': tweets});
+              'tweets': tweets,
+          	  'authUser': authUser});
     
         });
     });

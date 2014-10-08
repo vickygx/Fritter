@@ -43,7 +43,7 @@ module.exports.createUser = function(user_name, pass_word, fn){
 	and call fn(err,true)
 	If not, it will clear the cookies and call fn(err,false) 
 */
-module.exports.loginUserWithCookie = function(req, fn){
+module.exports.loginUserWithCookie = function(req, res, fn){
 	if (!req.cookies)
 		return fn(null,false);
 

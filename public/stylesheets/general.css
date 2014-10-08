@@ -65,8 +65,9 @@ body {
 .g-fritterusers {
 	background-color: white;
 	overflow-y: scroll;
-	height: 234px;
+	height: 244px;
 	width: 100%;
-	width: calc(100% + 5px);
+	width: calc(100% + 10px);
 	padding: 5px;
+	margin-left: -5px;
 }

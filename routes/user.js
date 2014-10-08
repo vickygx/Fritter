@@ -8,12 +8,11 @@ var RelationshipsController = require('../controllers/relationships');
 /* GET: Home page request */
 router.get('/:username', function(req, res) {
 	var username = req.params.username;
-	var isAuth = req.session.user ? true: false;
+	var authUser = req.session.user;
 	var isFollowing = false;
-	if (isAuth){
+	if (authUser){
 		RelationshipsController.isFollowing(req.session.user, username, function(result){
 			isFollowing = result;
-			console.log("Backend following is:", isFollowing);
 		});
 	}
 	// TODO: maybe reorg?? not sure if concurrency thing
@@ -21,7 +20,6 @@ router.get('/:username', function(req, res) {
 	UserController.getUser(username, function(e, user){
 		// Loads user's page if user exists
 		if (user && user.length !== 0){
-			console.log(user);
 			TweetsController.getUserTweetsByModDate(username, 
 				function(e, tweets){
 					res.render('users/user', 
@@ -29,7 +27,7 @@ router.get('/:username', function(req, res) {
 						 username: username, 
 						 tweets: tweets,
 						 tweetnum: tweets.length,
-						 isAuth: isAuth,
+						 authUser: authUser,
 						 isFollowing: isFollowing});
 				});
 		}
@@ -53,8 +51,8 @@ router.post('/follow', function(req, res){
 	// If user is logged in, let follower follow followee
 	if (follower){
 		RelationshipsController.follow(follower, followee, function(err, success){
-			// Just reload page
-			res.redirect('/user/' + followee);
+			if (success) res.send({success: true});
+			else res.send({success: false});
 		});
 	}
 
@@ -69,12 +67,11 @@ router.post('/unfollow', function(req, res){
 	var followee = req.body.followee;
 	var follower = req.session.user;
 	
-	console.log("what:", followee, follower);
 	// If user is logged in, let follower unfollow followee
 	if (follower){
 		RelationshipsController.unfollow(follower, followee, function(err, success){
-			// Just reload page
-			res.redirect('/user/' + followee);
+			if (success) res.send({success: true});
+			else res.send({success: false});
 		});
 	}
 

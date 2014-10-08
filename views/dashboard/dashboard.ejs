@@ -21,7 +21,7 @@
       $(document).ready(function(){
         var twts = <%- JSON.stringify(tweets) %>;
         var TwtModule = TweetModule();
-        TwtModule.addDisplayTweets(twts, '.TweetsContainer');
+        TwtModule.addTweets(twts, '.TweetsContainer', '<%- authUser %>');
         setup();
       });
     </script>

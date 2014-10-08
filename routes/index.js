@@ -24,7 +24,7 @@ router.get('/login', function(req, res){
 	}
 	// Try to log in with cookies 
 	else {
-		controller.loginUserWithCookie(req, function(err, success){
+		controller.loginUserWithCookie(req, res, function(err, success){
 			// Show error
 			if (err) res.render('error', {error: err});
 

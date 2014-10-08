@@ -47,6 +47,28 @@ module.exports.editTweet = function(tweetId, msg, fn){
 		});
 }
 
+/*	Retweets a tweet
+
+	fn: callback function after Tweet is retweeted
+		fn(err,success) 
+*/
+module.exports.reTweet = function(owner, msg, authuser, fn){
+	// Create a Tweet data object
+	var newTweet = new Tweet({
+		owner: authuser,
+		parent: owner,
+		message: msg, 
+		created: Date.now(),
+		modified: Date.now()
+	});
+
+	// Save the Tweet in the database
+	newTweet.save(function(err) {
+		if (err) fn(err, false);
+		else fn(null, true);
+	});	
+}
+
 /*	Remove a Tweet object with the _id=tweetId
 
 	fn: callback function after Tweet is updated

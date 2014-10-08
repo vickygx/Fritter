@@ -22,10 +22,10 @@
           // Adding Tweets of user
           var twts = <%- JSON.stringify(tweets) %>;
           var TwtModule = TweetModule();
-          TwtModule.addDisplayTweets(twts, '.tweetBox');
+          TwtModule.addTweets(twts, '.tweetBox', '<%= authUser %>');
 
           // Adding in Follow/ Unfollow button for authenticated user
-          var showButton = <%= isAuth %>; 
+          var showButton = <%= authUser %>; 
           if (showButton){
               var FUModule = FollowUnfollowModule();
               if (<%= isFollowing %>)

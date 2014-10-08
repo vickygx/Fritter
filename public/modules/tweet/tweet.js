@@ -7,7 +7,7 @@
 var TweetModule = function(){
 
 	/* 	Function to create individual tweet widgets*/
-	var TweetWidget = function(tweet, canEdit){
+	var TweetWidget = function(tweet, authUser){
 		var tweet_div = $('<div>').addClass('tweet');
 		tweet_div.attr('id', tweet._id);
 
@@ -64,7 +64,8 @@ var TweetModule = function(){
 
 		tweet_div.append(tweet_time);
 
-		if (canEdit){
+		// Adds editable functionality to tweets owned by authUser
+		if (authUser === tweet.owner ){
 			// Creating Save button
 			var save_button = $('<button>')
 				.addClass('saveButton')
@@ -88,6 +89,16 @@ var TweetModule = function(){
 				.html('x');
 
 			tweet_div.append(delete_button);
+		}
+		
+		// Adding in retweeting button only the tweet isn't the auth user's
+		else if (authUser && authUser != tweet.owner){
+			var retweet_button = $('<button>')
+				.addClass('retweetButton')
+				.addClass('g-redbutton')
+				.attr('type', 'submit')
+				.html('Retweet');
+			tweet_div.append(retweet_button);
 		}
 
 		return tweet_div;
@@ -145,33 +156,24 @@ var TweetModule = function(){
 	    return Math.floor(days) + ' days ago';
 	};
 
-	/*	Creates editable TweetWidget for all the Tweet objects in 
+	/*	Creates TweetWidgets for all the Tweet objects in 
 		msgs and adds them to the selector  
 	*/
-	var addEditableTweets = function(tweets, selector){
+	var addTweets = function(tweets, selector, authUser){
 		for(var i = 0; i < tweets.length; i++){
-	        $(selector).append(TweetWidget(tweets[i], true));
+	        $(selector).append(TweetWidget(tweets[i], authUser));
 	    }
-	    setEdit('editButton');
-	    setSave('saveButton');
-	    setDelete('deleteButton');
-	};
-
-	/*	Creates non-editable TweetWidget for all the Tweet objects in 
-		msgs and adds them to the selector  
-	*/
-	var addDisplayTweets = function(tweets, selector){
-		for(var i = 0; i < tweets.length; i++){
-	        $(selector).append(TweetWidget(tweets[i], false));
-	    }
-
+	    setEdit('.editButton');
+	    setSave('.saveButton');
+	    setDelete('.deleteButton');
+	    setRetweet('.retweetButton');
 	};
 
 	/*	Adds functionality of editing tweets to all html objects
-		with the class <classname> 
+		with the selector
 	*/
-	var setEdit = function(classname){
-		$('.' + classname).click(function(){
+	var setEdit = function(selector){
+		$(selector).click(function(){
 			var parent = $(this).parent();
 
 			// Hide current text display
@@ -194,61 +196,94 @@ var TweetModule = function(){
 		});
 	};
 
-	/*	Adds functionality of saving tweets to all html objects
-		with the class <classname> 
+	/*	Adds click functionality of retweeting tweets to all html objects
+		with the selector in a tweet widget
+		
 	*/
-	var setSave = function(classname){
-		$('.' + classname).click(function(){
+	var setRetweet = function(selector){
+		$(selector).click(function(){
+			// Getting tweet message and owner VS. getting message id and accessing it in database?
+			var parent = $(this).parent();
+			var owner = parent.find('.user_owner').find('.g-username').html();
+			var msg = parent.find('.textdisplay').html();
+			
+			// Data is received with parameters success and redirect
+			var successFunction = function(data, textStatus, jqXHR){
+				if (data.success){
+					window.location = data.redirect;
+				}
+				else {
+					alert('Could not retweet!');
+				}
+			}
+
+			// Make a post request to edit tweet
+			$.post('/home/retweet/', { message: msg, owner: owner}, successFunction, 'json');		
+			
+			
+		});
+	};
+
+	/*	Adds click functionality of saving tweets to all html objects
+		with the selector in a tweet widget
+		
+	*/
+	var setSave = function(selector){
+		$(selector).click(function(){
 			var saveButton = $(this);
 			var parent = saveButton.parent();
 			var msgId = parent.attr('id');
 			var textedit = parent.find('.textedit');
 			var newMessage = textedit.val();
 
-			var successFunction = function(){
-				// Hides itextinput
-				textedit.css('display', 'none');
+			var successFunction = function(data, textStatus, jqXHR){
+				if (data.success){
+					// Hides itextinput
+					textedit.css('display', 'none');
 
-				// Updates textdisplay and shows it
-				var textdisplay = parent.find('.textdisplay');
-				var currentText = textdisplay.html(newMessage);
-				textdisplay.css('display', 'block');
+					// Updates textdisplay and shows it
+					var textdisplay = parent.find('.textdisplay');
+					var currentText = textdisplay.html(newMessage);
+					textdisplay.css('display', 'block');
+					
+					// Hide save button
+					saveButton.css('display', 'none');
+
+					// Show edit button
+					parent.find('.editButton')
+						.css('display', 'block');
+				}
 				
-				// Hide save button
-				saveButton.css('display', 'none');
-
-				// Show edit button
-				parent.find('.editButton')
-					.css('display', 'block');
 			}
 
 			// Make a post request to edit tweet
-			$.post('/home/edittweet/' + msgId, { 'newmessage': newMessage}, successFunction);		
+			$.post('/home/edittweet/' + msgId, { 'newmessage': newMessage}, successFunction, 'json');		
 			
 		});
 	};
 
-	/*	Adds functionality of deleting tweets to all html objects
-		with the class <classname> 
+	/*	Adds click functionality of deleting tweets to all html objects
+		with the class <classname> in a tweet widget
 	*/
-	var setDelete = function(classname){
-		$('.' + classname).click(function(){
+	var setDelete = function(selector){
+		$(selector).click(function(){
 			var parent = $(this).parent();
 			var msgId = parent.attr('id');
 
 			// Makes a post request to delete
 			$.post('/home/deletetweet/' + msgId, 
-					function(){
-						// Removes tweet if successfully deleted
-						parent.remove();	
-					});
+					function(data, textStatus, jqXHR){
+						if (data.success){
+							// Removes tweet from view if successfully deleted
+							parent.remove();
+						}	
+					}, 'json');
 		});
 	};
 
 
 	return {
-		'addEditableTweets': addEditableTweets,
-		'addDisplayTweets': addDisplayTweets
+		'addTweets': addTweets
 	}
 
 }

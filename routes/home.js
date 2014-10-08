@@ -24,7 +24,7 @@ router.get('/', function(req, res) {
 					function(e, tweets){
 						res.render('home/home', 
 							{title: 'User Page', 
-							username: currentUser, 
+							authUser: currentUser, 
 							tweets: tweets,
 							followed: folowd,
 							followers: folowrs});
@@ -38,6 +38,17 @@ router.get('/', function(req, res) {
 		res.redirect('/login');
 	}
 });
+
+// router.get('/', function(req, res){
+// 	res.render('home/home');
+// });
+
+// router.get('/followers', function(req, res){
+// 	RelationshipsController.getFollowers(currentUser, 
+// 		function(e, followers){
+// 			res.json(followers);
+// 		});
+// });
 
 
 /* POST: Create tweet request */
@@ -56,40 +67,64 @@ router.post('/tweet', function(req, res){
 	})
 });
 
-/* POST: Delete tweet request */
+/* 	POST: Delete tweet request 
+	accessed through AJAX
+*/
 router.post('/deletetweet/:id', function(req, res){
 	var tweetId = req.params.id;
 
 	// If remove tweet is successful, home page is shown, else error page
 	TweetsController.removeTweet(tweetId, function(err, success){
-		if (err) {
-			res.render('errorpage', {
-				title: 'Sorry, our server could not process that request', 
-				message: "We have notified our engineers about your tweet deletion problem."});
+		if (success) {
+			res.send({success: true});
 		}
-		else if (success) res.redirect('/home');
-		else // Show user not found page
-			res.render('errorpage', {
-				title: 'That tweet does not exist!', 
-				message: "Please click on the bottom right to go back to home."});
+		else {
+			res.send({success: false});
+		}
 	});
 	
 });
 
-/* POST: Edit tweet request */
+/* 	POST: Edit tweet request 
+	Accessed through AJAX
+*/
 router.post('/edittweet/:id', function(req, res){
 	var tweetId = req.params.id;
 	var msg = req.body.newmessage;
 
 	// If edit is successful, home page is shown, else error
 	TweetsController.editTweet(tweetId, msg, function(err, success){
-		if (success) res.redirect('/home');
+		if (success) {
+			res.send({success: true});
+		}
 		else {
-			res.render('errorpage', {
-				title: 'Our server could not process that request!', 
-				message: "Please click on the bottom right to go back to home."});
+			res.send({success: false});
 		}
 	});
+});
+
+/* 	POST: Retweet request 
+	Accessed through AJAX
+*/
+router.post('/retweet', function(req, res){
+	var tweetId = req.params.id;
+	var msg = req.body.message;
+	var owner = req.body.owner;
+
+	var authuser = req.session.user;
+	if (authuser){
+		TweetsController.reTweet(owner, msg, authuser, function(err, success){
+			if (success) {
+				res.send({redirect: '/home', success: true});
+			}
+			else {
+				res.send({redirect: null, success: false});
+			}
+		});
+	}
+	else {
+		res.send({redirect: null, success: false});
+	}
 });
 
 module.exports = router;
