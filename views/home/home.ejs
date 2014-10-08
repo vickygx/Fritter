@@ -21,60 +21,55 @@
       $(document).ready(function(){
         var twts = <%- JSON.stringify(tweets) %>;
         var TwtModule = TweetModule();
-        TwtModule.addTweets(twts, '.tweetBox', '<%- authUser %>');
+        TwtModule.addTweets(twts, '.tweetBox', '<%- isAuth %>', '<%- authUser %>');
 
         setup();
       });
     </script>
   </head>
-  <body>
-    <!-- Navigation -->
-    <div><a href="/dashboard"> Dashboard </a></div>
+  <body id="body">
+    <div class="g-content">
 
-    <!-- Logout -->
-    <form action="/logout" method="post">
-      <div class="logout" onclick="parentNode.submit()">Logout?</div>
-    </form>
-    
-    <!-- Titles -->
-    <h1 class="thinTitle"><%= title %></h1>
-    <h3 class="thinTitle"> Welcome <%= authUser %> </h3>
+      <!-- Titles -->
+      <h1 class="thinTitle"><%= title %></h1>
+      <h3 class="thinTitle"> Welcome <%= authUser %> </h3>
 
-    <!-- Box of Followed users -->
-    <div class="Followed">
-      <div class="g-fritteruserscontainer">
-        <h3 class="g-fritterusertitle"> Followed </h3>
-        <div class="g-fritterusers">
-          <% for(var i = 0; i < followed.length; i++){ %>
-            <div class="g-userlink">@<span class="g-username"><%= followed[i].followee %></span></div>
-          <%}%>
+      <!-- Box of Followed users -->
+      <div class="Followed">
+        <div class="g-fritteruserscontainer">
+          <h3 class="g-fritterusertitle"> Followed </h3>
+          <div class="g-fritterusers">
+            <% for(var i = 0; i < followed.length; i++){ %>
+              <div class="g-userlink">@<span class="g-username"><%= followed[i].followee %></span></div>
+            <%}%>
+          </div>
         </div>
       </div>
-    </div>
 
-    <!-- Box of Followers-->
-    <div class="Followers">
-      <div class="g-fritteruserscontainer">
-        <h3 class="g-fritterusertitle"> Followers </h3>
-        <div class="g-fritterusers">
-          <% for(var i = 0; i < followers.length; i++){ %>
-            <div class="g-userlink">@<span class="g-username"><%= followers[i].follower %></span></div>
-          <%}%>
+      <!-- Box of Followers-->
+      <div class="Followers">
+        <div class="g-fritteruserscontainer">
+          <h3 class="g-fritterusertitle"> Followers </h3>
+          <div class="g-fritterusers">
+            <% for(var i = 0; i < followers.length; i++){ %>
+              <div class="g-userlink">@<span class="g-username"><%= followers[i].follower %></span></div>
+            <%}%>
+          </div>
         </div>
       </div>
-    </div>
 
-    <!-- Tweeting box -->
-    <div class="tweetingBox"> 
-        <form name="input" action="/home/tweet" method="post">
-            <input type="text" name="message" class="TweetInput" placeholder="What are you thinking?">
-            <input type="submit" value="TWEET" class="TweetSubmit g-redbutton">
-        </form>
-    </div>
+      <!-- Tweeting box -->
+      <div class="tweetingBox"> 
+          <form name="input" action="/home/tweet" method="post">
+              <input type="text" name="message" class="TweetInput" placeholder="What are you thinking?">
+              <input type="submit" value="TWEET" class="TweetSubmit g-redbutton">
+          </form>
+      </div>
 
-    <!-- Box to contain user's messages -->
-    <div class="tweetBox">
-      <div class="tweetBoxTitle">My Tweets</div>
+      <!-- Box to contain user's messages -->
+      <div class="tweetBox">
+        <div class="tweetBoxTitle">My Tweets</div>
+      </div>
     </div>
     
   </body>

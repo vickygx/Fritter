@@ -10,6 +10,7 @@ router.get('/', function(req, res) {
 	// Renders home page if logged in
 	if (req.session.user){
 		var currentUser = req.session.user;
+		var isAuth = currentUser ? true : false;
 
 		// Getting followed users
 		RelationshipsController.getFollowed(currentUser, function(e, followed){	
@@ -23,8 +24,9 @@ router.get('/', function(req, res) {
 				TweetsController.getUserTweetsByModDate(currentUser,
 					function(e, tweets){
 						res.render('home/home', 
-							{title: 'User Page', 
+							{title: 'Home Page', 
 							authUser: currentUser, 
+							isAuth: isAuth,
 							tweets: tweets,
 							followed: folowd,
 							followers: folowrs});

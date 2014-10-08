@@ -9,15 +9,17 @@ var TweetController = require('../controllers/tweets');
 router.get('/', function(req, res) {
 
 	var authUser = req.session.user;
+  var isAuth = req.session.user ? true: false;
 
     UserController.getAllUsers(function(e, users){
         var usrs = (e || !users) ? [] : users;
         TweetController.getAllTweetsByModDate(function(e, tweets){
           res.render('dashboard/dashboard', 
-              {title: 'Welcome to Fritter', 
+              {title: 'Dashboard', 
               'individuals': usrs,
               'tweets': tweets,
-          	  'authUser': authUser});
+          	  'authUser': authUser,
+              'isAuth': isAuth});
     
         });
     });

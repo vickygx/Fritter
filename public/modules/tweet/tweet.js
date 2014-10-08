@@ -7,7 +7,7 @@
 var TweetModule = function(){
 
 	/* 	Function to create individual tweet widgets*/
-	var TweetWidget = function(tweet, authUser){
+	var TweetWidget = function(tweet, isAuth, authUser){
 		var tweet_div = $('<div>').addClass('tweet');
 		tweet_div.attr('id', tweet._id);
 
@@ -34,7 +34,11 @@ var TweetModule = function(){
 			var parent_div = $('<span>')
 				.addClass('user_parent')
 				.addClass('user_names')
-				.html('<> from ' + tweet['parent']);
+				.html('<> from ')
+			parent_div.append(
+				$('<span>').addClass('g-username')
+						   .html(tweet['parent'])); 
+
 			tweet_user.append(parent_div);
 		}
 
@@ -64,11 +68,13 @@ var TweetModule = function(){
 
 		tweet_div.append(tweet_time);
 
+		
 		// Adds editable functionality to tweets owned by authUser
 		if (authUser === tweet.owner ){
 			// Creating Save button
 			var save_button = $('<button>')
 				.addClass('saveButton')
+				.addClass('g-blackbutton')
 				.attr('type', 'submit')
 				.html('Save');
 
@@ -77,6 +83,7 @@ var TweetModule = function(){
 			// Creating Edit button
 			var edit_button = $('<button>')
 				.addClass('editButton')
+				.addClass('g-blackbutton')
 				.attr('type', 'submit')
 				.html('Edit');
 
@@ -85,6 +92,7 @@ var TweetModule = function(){
 			// Creating Delete button
 			var delete_button = $('<button>')
 				.addClass('deleteButton')
+				.addClass('g-redbutton')
 				.attr('type', 'submit')
 				.html('x');
 
@@ -92,7 +100,7 @@ var TweetModule = function(){
 		}
 		
 		// Adding in retweeting button only the tweet isn't the auth user's
-		else if (authUser && authUser != tweet.owner){
+		else if (isAuth === 'true' && authUser != tweet.owner){
 			var retweet_button = $('<button>')
 				.addClass('retweetButton')
 				.addClass('g-redbutton')
@@ -159,9 +167,9 @@ var TweetModule = function(){
 	/*	Creates TweetWidgets for all the Tweet objects in 
 		msgs and adds them to the selector  
 	*/
-	var addTweets = function(tweets, selector, authUser){
+	var addTweets = function(tweets, selector, isAuth, authUser){
 		for(var i = 0; i < tweets.length; i++){
-	        $(selector).append(TweetWidget(tweets[i], authUser));
+	        $(selector).append(TweetWidget(tweets[i], isAuth, authUser));
 	    }
 	    setEdit('.editButton');
 	    setSave('.saveButton');
