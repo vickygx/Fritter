@@ -40,7 +40,7 @@
           <h3 class="g-fritterusertitle"> Followed </h3>
           <div class="g-fritterusers">
             <% for(var i = 0; i < followed.length; i++){ %>
-              <div class="g-userlink">@<span class="g-username"><%= followed[i].followee %></span></div>
+              <div class="g-userlink">@<span class="g-username"><%= followed[i] %></span></div>
             <%}%>
           </div>
         </div>
@@ -52,7 +52,7 @@
           <h3 class="g-fritterusertitle"> Followers </h3>
           <div class="g-fritterusers">
             <% for(var i = 0; i < followers.length; i++){ %>
-              <div class="g-userlink">@<span class="g-username"><%= followers[i].follower %></span></div>
+              <div class="g-userlink">@<span class="g-username"><%= followers[i] %></span></div>
             <%}%>
           </div>
         </div>

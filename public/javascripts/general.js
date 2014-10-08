@@ -66,6 +66,7 @@ var createNavBar = function(){
 	var navbar = $('<div>')
 		.addClass('g-navbar');
 
+	// Adding logout button
 	var logout = $('<form>')
 		.addClass('g-nav')
 		.addClass('g-nav-log')
@@ -78,6 +79,7 @@ var createNavBar = function(){
 
 	navbar.append(logout);
 
+	// Adding login button
 	var login = $('<form>')
 		.addClass('g-nav')
 		.addClass('g-nav-log')
@@ -91,19 +93,7 @@ var createNavBar = function(){
 
 	navbar.append(login);
 
-	var dashboard = $('<form>')
-		.addClass('g-nav')
-		.addClass('g-nav-place')
-		.attr('action', '/dashboard')
-		.attr('method', 'get')
-		.append($('<input>')
-			.addClass('g-unbutton')
-			.addClass('g-nav-link')
-			.attr('type', 'submit')
-			.attr('value', 'Dashboard'));
-
-	navbar.append(dashboard);
-
+	// Adding home nav
 	var home = $('<form>')
 		.addClass('g-nav')
 		.addClass('g-nav-place')
@@ -117,6 +107,35 @@ var createNavBar = function(){
 
 
 	navbar.append(home);
+
+	// Adding dashboard nav
+	var dashboard = $('<form>')
+		.addClass('g-nav')
+		.addClass('g-nav-place')
+		.attr('action', '/dashboard')
+		.attr('method', 'get')
+		.append($('<input>')
+			.addClass('g-unbutton')
+			.addClass('g-nav-link')
+			.attr('type', 'submit')
+			.attr('value', 'Dashboard'));
+
+	navbar.append(dashboard);
+
+	// Adding followed dashboard nav
+	var followed = $('<form>')
+		.addClass('g-nav')
+		.addClass('g-nav-place')
+		.attr('action', '/dashboard/followed')
+		.attr('method', 'get')
+		.append($('<input>')
+			.addClass('g-unbutton')
+			.addClass('g-nav-link')
+			.attr('type', 'submit')
+			.attr('value', 'Followed'));
+
+	navbar.append(followed);
+
 
 	return navbar;
 

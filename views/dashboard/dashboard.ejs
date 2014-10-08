@@ -34,11 +34,14 @@
 
       <!-- Box of Fritter Users -->
       <div class="g-fritteruserscontainer">
-        <h3 class="g-fritterusertitle"> Current fritters </h3>
+        <h3 class="g-fritterusertitle"> <%= frittertype %> </h3>
         <div class="g-fritterusers">
           <% for(var i = 0; i < individuals.length; i++){ %>
           	<div class="g-userlink">
-          		@<span class="g-username"><%= individuals[i].username %> </span>
+          		@<span class="g-username"><%
+                if (frittertype === 'Followed') { %><%=individuals[i]%> 
+                <% } else {%><%=individuals[i].username%><% } %>
+              </span>
           	</div>
           <%}%>
         </div>

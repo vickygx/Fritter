@@ -12,12 +12,10 @@ I. Purpose
 This project is a clone of the twitter and aims to provide a space where users can:
 	- login / signup
 	- post, edit and delete tweets
-	- view own tweets
-	- view tweets of others
-	- see other users
-	- follow other users
-	- visit user's page
-	- retweet other user's tweets
+	- view own tweets as well as tweets of others
+	- NEW! see other users' page
+	- NEW! follow other users
+	- NEW! retweet other user's tweets
 
 The application is an Express Application built on MongoDB as its database. 
 
@@ -96,6 +94,12 @@ Analysis of c). The benefits of this design is that both creating/updating/delet
 
 I ended up choosing c) because it gives the most flexibility in adding in new features related to followers/followees (such as showing filtered newsfeed as I describe below, showing a list of followers, showing a list of followees) and because it is very simple in both creation, editing and access.
 
+Here is what getting a filtered newsfeed entails:
+It simply requires:
+	- Find all Relationships where those you followed is the followee.
+	- Use that list as a query for finding messages with owner as those usernames.
+Thus, the implementation is quite easy with this design.
+
 4) Schema for implementing retweeting
 I decided to just add another attribute to the Tweet schema (parent) because the very essence of a tweet and a re-tweet is quite similar. It means their message content is the same, and there is someone it comes from. We can copy over the message quite easily, and now we just need to hold the parent information which is the new attribute. Having them have the same schema means that a re-tweet still has all the same functionalities as a tweet (can edit, delete, etc) quite easily without much additional implemenetation. 
 
@@ -124,21 +128,15 @@ Although the latter makes sure that if a user A deletes one of his tweets and us
 
 
 4) Designing the additional feature of followers
-There are numerous ways where you can have the feature of followers. 
-For my project, the main idea of followers is for any user to have a way to easily keep track of people who they are interested in, keep track of people who are interested in them and to see the content of these people, all for the larger goal of being able to discover and dive into a different relationships.
+There are numerous ways where you can represent the feature of followers. 
+For my project, the main purpose of followers is for any user to have a way to easily keep track of people who they are interested in, keep track of people who are interested in them and to see the content of these people, for the larger goal of being able to share content.
 
-Thus, I decided to implement this feature such that you can only follow a user when you land on a user's page (when a user lands on a user page, the entire focus is on that user). However, once you follow that user, that user will appear as a name in box on your right in your homepage, where clicking on the name brings you directly to their user page. Thus, this allows you to always easily access thier homepage again to see their tweets. There is also a box on the right telling you which users have followed you, and the reason for its prominient behavior is so that you can also see if you are interested in the people who are also interested in you. 
+I have decided to implement the following feature in the following way: 
+1) in order to follow a user, one must go to their user page. User pages are pages where the entire content is about the user and it shows a list of the tweets that user has posted. The reason for this is because going to a user page shows interest and an additional follow expresses interest in the tweets of the user as well.
 
-I decided to leave the dashboard page a feed of ALL user's and not just of those you are following because it allows for more discovery of different people, and the tweets of those you follow and those who follow you can already be accessed through your home page (and through a more individual way).
+Once you have followed someone, a box on the right in your home page tells you a list of people you have followed and a box on the left shows who has followed you. Both these boxes have each user link to their own user page. The reason for its prominient behavior is to place more meaning on following such that you can explicitly learn more about people who are also interested in you. 
 
-Once there are a lot more people on the site, however, the dashboard should certainly show a filtered newsfeed (or have the option to do so) because there will be many tweets that might not be of interest. However, since the website has a small user base as of now, I have decided to leave it out as part of a purposeful design decision. 
-
-I did, however, design the model with the idea that it could be easily extended to sure a filtered newsfeed. Here is what getting a filtered newsfeed entails:
-	- Find all Relationships where those you followed is the followee.
-	- Use that list as a query for finding messages with owner as those usernames.
-Thus, the implementation is quite easy with this design.
-	
-
+The dashboard is also an interesting design choice. I decided to learn the normal dashboard of all tweets from all fritter users as the dashboard so that people can discover more. However, there is now a link where you can see of dashboard of tweets from only those people you have followed.
 
 V. Design Benefits
 ------------------

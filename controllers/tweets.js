@@ -84,7 +84,11 @@ module.exports.removeTweet = function(tweetId, fn){
 		});
 }
 
-module.exports.getUsersAndTweets
+module.exports.getTweetsOfUsers = function(list_of_users, fn){
+	return Tweet.find( {owner: {$in: list_of_users} })
+		.sort('-modified')
+		.exec(fn);
+}
 
 
 /* 	Gets the Tweet objects of the given user with

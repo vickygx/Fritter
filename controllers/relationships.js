@@ -48,14 +48,14 @@ module.exports.unfollow = function(follower, followee, fn){
 	fn: callback function 
 */
 module.exports.getFollowers = function(username, fn){
-	return Relationship.find({followee: username}, fn);
+	return Relationship.distinct( 'follower', {followee: username}, fn);
 }
 
 /*	Gets a lit of people who username has followed
 	fn: callback function 	
 */
 module.exports.getFollowed = function(username, fn){
-	return Relationship.find({follower: username}, fn);
+	return Relationship.distinct('followee', {follower: username}, fn);
 }
 
 /*	Checks if follower has followed followee
@@ -64,11 +64,8 @@ module.exports.getFollowed = function(username, fn){
 module.exports.isFollowing = function(follower, followee, fn){
 	Relationship.find({follower: follower, followee: followee}, 
 		function(e, relate){
-			console.log("Trying to find it and result is:", relate);
 			if (e || !relate || relate.length === 0) return fn(false);
 			return fn(true);
 	});
 }
-
-module.exports.getUsersAndTweets
 
