@@ -40,6 +40,7 @@ body {
 	display: inline-block;
 	vertical-align: top;
 	right: 10px;
+	z-index: 10;
 }
 
 .Followers {
@@ -47,5 +48,17 @@ body {
 	display: inline-block;
 	vertical-align: top;
 	left: 10px;
+	z-index: 10;
 }
 
+@media (max-width: 880px){
+	.Followed {
+		display: none;
+	}
+}
+
+@media (max-width: 840px){
+	.Followers {
+		display: none;
+	}
+}

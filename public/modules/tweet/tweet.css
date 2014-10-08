@@ -67,14 +67,14 @@
 .editButton {
 	position:absolute;
 	right: 5px;
-	bottom: 2px;
+	bottom: 3px;
 	padding: 4px 16px !important;
 }
 
 .retweetButton {
 	position:absolute;
 	right: 5px;
-	bottom: 1px;
+	bottom: 3px;
 	color: rgb(134, 17, 45);
 	padding: 3px 6px !important;
 }
@@ -88,7 +88,7 @@
 	display: none;
 	position: absolute;
 	right: 5px;
-	bottom: 2px;
+	bottom: 5px;
 	padding: 4px 16px !important;
 
 }
